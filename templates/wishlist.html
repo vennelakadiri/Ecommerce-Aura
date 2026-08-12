@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura | Wishlist</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background: url('https://png.pngtree.com/background/20230519/original/pngtree-store-with-hanging-clothing-in-a-high-end-environment-picture-image_2654941.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+.overlay {
+  background: rgba(0, 0, 0, 0.7);
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+/* --- NAVBAR --- */
+.navbar {
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 5%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-left { display: flex; align-items: center; gap: 50px; }
+.nav-logo { font-size: 28px; font-weight: bold; letter-spacing: 4px; color: #b38b59; text-decoration: none; }
+.nav-links { display: flex; gap: 35px; list-style: none; align-items: center; }
+.nav-links a { text-decoration: none; color: #333; font-size: 13px; font-weight: 700; text-transform: uppercase; transition: 0.3s; }
+.nav-links a:hover { color: #b38b59; }
+.nav-right { display: flex; align-items: center; gap: 25px; }
+
+.search-bar {
+  background: #fdfaf5;
+  border: 1px solid #eee;
+  padding: 10px 15px;
+  border-radius: 4px;
+  width: 300px;
+  font-size: 13px;
+  outline: none;
+}
+
+.search-btn {
+  background: #b38b59;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.search-btn span {
+  color: white;
+  font-size: 18px;
+}
+
+.nav-icon-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #333;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.nav-icon-group span { font-size: 22px; margin-bottom: 2px; }
+.nav-icon-group:hover { color: #b38b59; }
+
+/* --- MAIN CONTAINER --- */
+.main-container {
+  width: 95%;
+  max-width: 1300px;
+  margin: 30px auto;
+  background: #fdfaf5;
+  border-radius: 40px;
+  padding: 40px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+
+.products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.products-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #222;
+}
+
+.products-title span { color: #b38b59; }
+
+.products-count {
+  font-size: 14px;
+  color: #666;
+}
+
+/* --- PRODUCTS GRID --- */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+}
+
+.product-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.product-image {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-badge {
+  position: absolute;
+  top: 10px;
+  left: 52px;
+  background: #b38b59;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  z-index: 5;
+}
+
+/* Red Bin Delete Button on Top Left */
+.product-delete {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: white;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #dc2626;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  z-index: 10;
+}
+
+.product-delete:hover {
+  background: #dc2626;
+  color: white;
+  transform: scale(1.1);
+}
+
+.product-delete span {
+  font-size: 18px;
+}
+
+.product-info {
+  padding: 15px;
+}
+
+.product-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.product-brand {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 8px;
+}
+
+.product-price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.price-current {
+  font-size: 18px;
+  font-weight: 700;
+  color: #222;
+}
+
+.price-original {
+  font-size: 14px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.price-discount {
+  font-size: 12px;
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.product-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.add-to-cart-btn {
+  flex: 1;
+  padding: 10px;
+  background: #b38b59;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.add-to-cart-btn:hover {
+  background: #9a7a48;
+}
+
+.quick-view-btn {
+  padding: 10px;
+  background: #f3f3f3;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.quick-view-btn:hover {
+  background: #e0e0e0;
+}
+
+/* --- EMPTY STATE --- */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+}
+
+.empty-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+  color: #ccc;
+}
+
+.empty-title {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.empty-text {
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+
+.empty-btn {
+  display: inline-block;
+  padding: 12px 30px;
+  background: #b38b59;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.empty-btn:hover { opacity: 0.9; }
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .products-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .navbar { flex-direction: column; padding: 15px; }
+  .nav-left { flex-direction: column; gap: 20px; }
+  .search-bar { width: 200px; }
+  .main-container { width: 95%; padding: 20px; }
+  .products-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+}
+
+@media (max-width: 480px) {
+  .products-grid { grid-template-columns: 1fr; }
+  .nav-right { gap: 15px; }
+  .nav-icon-group span { font-size: 18px; }
+  .nav-icon-group { font-size: 9px; }
+}
+</style>
+</head>
+<body>
+
+<div class="overlay">
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="/home/" class="nav-logo">AURA</a>
+      <ul class="nav-links">
+        <li><a href="/store/products/">All Products</a></li>
+        <li><a href="/store/products/?category=men">Men</a></li>
+        <li><a href="/store/products/?category=women">Women</a></li>
+        <li><a href="/store/products/?category=kids">Kids</a></li>
+        <li><a href="/store/products/?category=home">Home</a></li>
+        <li><a href="/store/products/?category=beauty">Beauty</a></li>
+      </ul>
+    </div>
+    <div class="nav-right">
+      <form method="GET" action="/store/products/" style="display: flex; align-items: center; margin: 0; padding: 0; position: relative; z-index: 9999;" onsubmit="const v = this.elements['search'].value.trim(); if(!v){event.preventDefault(); return false;} this.elements['search'].value = v; return true;">
+        <input type="text" class="search-bar" name="search" autocomplete="off" placeholder="Search for products, brands and more">
+        <button type="submit" class="search-btn">
+          <span class="material-symbols-outlined">search</span>
+        </button>
+      </form>
+      <a href="/accounts/profile/" class="nav-icon-group">
+        <span class="material-symbols-outlined">person</span>Profile
+      </a>
+      <a href="/store/wishlist/" class="nav-icon-group" style="color: #b38b59;">
+        <span class="material-symbols-outlined">favorite</span>Wishlist
+      </a>
+      <a href="/store/cart/" class="nav-icon-group">
+        <span class="material-symbols-outlined">shopping_bag</span>Bag
+      </a>
+    </div>
+  </nav>
+
+  <div class="main-container">
+    <div class="products-header">
+      <h1 class="products-title">My <span>Wishlist</span></h1>
+      {% if wishlist_products %}
+      <div class="products-count">{{ wishlist_products|length }} Saved Items</div>
+      {% endif %}
+    </div>
+    
+    {% if wishlist_products %}
+    <div class="products-grid">
+      {% for product in wishlist_products %}
+      <div class="product-card" onclick="window.location.href='/store/product/{{ product.slug }}/'" style="cursor: pointer;">
+        <div class="product-image">
+          <img src="{% if product.images.first %}{{ product.images.first.image }}{% else %}https://picsum.photos/seed/product{{ product.id }}/300/220.jpg{% endif %}" alt="{{ product.name }}">
+          {% if product.discount_price %}
+          <div class="product-badge">-{{ product.get_discount_percentage }}%</div>
+          {% endif %}
+          <div class="product-delete" data-product-id="{{ product.id }}" onclick="event.stopPropagation(); removeFromWishlist({{ product.id }}, this)" title="Remove from Wishlist">
+            <span class="material-symbols-outlined">delete</span>
+          </div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">{{ product.name }}</div>
+          <div class="product-brand">{{ product.brand.name }}</div>
+          <div class="product-price">
+            <span class="price-current">${{ product.get_final_price }}</span>
+            {% if product.discount_price %}
+            <span class="price-original">${{ product.price }}</span>
+            <span class="price-discount">{{ product.get_discount_percentage }}% OFF</span>
+            {% endif %}
+          </div>
+          <div class="product-actions">
+            <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(parseInt('{{ product.id }}'))">ADD TO BAG</button>
+            <button class="quick-view-btn" onclick="event.stopPropagation(); window.location.href='/store/product/{{ product.slug }}/';">
+              <span class="material-symbols-outlined">visibility</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    
+    {% else %}
+    <div class="empty-state">
+      <span class="material-symbols-outlined empty-icon">favorite_border</span>
+      <h3 class="empty-title">Your wishlist is empty</h3>
+      <p class="empty-text">Save items you love to your wishlist and they'll appear here</p>
+      <a href="/store/products/" class="empty-btn">Continue Shopping</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+async function removeFromWishlist(productId, button) {
+  if (!confirm('Remove this item from your wishlist?')) return;
+  
+  try {
+    const csrf = getCookie('csrftoken'); 
+    if (!csrf) { 
+      alert('Security token missing. Please refresh the page and try again.'); 
+      location.reload(); 
+      return; 
+    }
+    const response = await fetch('/store/toggle-wishlist/', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'X-CSRFToken': csrf
+      },
+      body: `product_id=${productId}`
+    });
+    
+    if (!response.ok) {
+      if (response.status === 403) {
+        alert('Security check failed (403). Refreshing page...');
+        location.reload();
+        return;
+      }
+    }
+    
+    let result;
+    try {
+      result = await response.json();
+    } catch(_) {
+      result = { success: false, message: 'Invalid response' };
+    }
+    
+    const card = button.closest('.product-card');
+    const grid = document.querySelector('.products-grid');
+    
+    if (result.success || (result.message && result.message.toLowerCase().includes('not found'))) {
+      if (card) {
+        card.style.transform = 'scale(0.8)';
+        card.style.opacity = '0';
+        card.style.transition = 'all 0.3s ease';
+        setTimeout(() => {
+          card.remove();
+          if (grid && grid.children.length === 0) {
+            location.reload();
+          }
+        }, 300);
+      }
+    } else {
+      alert(result.message);
+    }
+  } catch (error) {
+    const card = button.closest('.product-card');
+    const grid = document.querySelector('.products-grid');
+    if (card) card.remove();
+    if (grid && grid.children.length === 0) {
+      location.reload();
+    }
+  }
+}
+
+async function addToCart(productId) {
+  try {
+    const csrf = getCookie('csrftoken'); 
+    if (!csrf) { 
+      alert('Security token missing. Please refresh the page and try again.'); 
+      location.reload(); 
+      return; 
+    }
+    const response = await fetch('/store/add-to-cart/', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'X-CSRFToken': csrf
+      },
+      body: `product_id=${productId}&quantity=1`
+    });
+    
+    if (!response.ok) {
+      if (response.status === 403) {
+        alert('Security check failed (403). Refreshing page...');
+        location.reload();
+        return;
+      }
+      alert('Failed to add to bag');
+      return;
+    }
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      alert(result.message);
+    } else {
+      if (result.message === 'Please login to add items to cart') {
+        if (confirm('Please login to add items to cart. Redirect to login page?')) {
+          window.location.href = '/accounts/login/';
+        }
+      } else {
+        alert(result.message);
+      }
+    }
+  } catch (error) {
+    alert('Failed to add to bag');
+  }
+}
+
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+</script>
+
+</body>
+</html>

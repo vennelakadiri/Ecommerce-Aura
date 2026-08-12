@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura | Sign Up</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url('https://png.pngtree.com/background/20230519/original/pngtree-store-with-hanging-clothing-in-a-high-end-environment-picture-image_2654941.jpg') no-repeat center center/cover;
+  padding: 20px 0;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.card {
+  position: relative;
+  z-index: 2;
+  width: 420px;
+  background: #fff;
+  border-radius: 25px;
+  padding: 30px 40px;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.logo {
+  font-size: 32px;
+  font-weight: bold;
+  letter-spacing: 4px;
+  color: #b38b59;
+}
+
+.sub {
+  font-size: 10px;
+  color: #888;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.desc {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+.input-group {
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.input-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #444;
+}
+
+.req-msg {
+  font-size: 10px;
+  color: #dc2626;
+  display: none;
+  font-weight: 600;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 13px 14px;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  font-size: 14px;
+  background: #fdfdfd;
+  outline: none;
+  transition: 0.3s;
+}
+
+.input-group input:focus {
+  border-color: #0a7c6f;
+}
+
+button {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 35px;
+  background: #0a7c6f;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 10px;
+}
+
+button:hover {
+  background: #08685d;
+  transform: translateY(-1px);
+}
+
+.login-link {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555;
+}
+
+.login-link a {
+  color: #0a7c6f;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
+#msg {
+  margin-top: 15px;
+}
+
+@media (max-width: 480px) {
+  .card {
+    width: 90%;
+    padding: 20px 25px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="overlay"></div>
+
+<div class="card">
+  <div class="logo">AURA</div>
+  <div class="sub">Boutique & Apparel</div>
+
+  <h2>Create Account</h2>
+  <div class="desc">Join AURA for exclusive fashion & offers</div>
+
+  <form id="signupForm" onsubmit="event.preventDefault(); validateForm();">{% csrf_token %}
+    <div class="input-group">
+      <div class="label-row">
+        <label>Full Name</label>
+        <span id="nameReq" class="req-msg">Full Name is required</span>
+      </div>
+      <input type="text" id="fullName" placeholder="Enter your full name">
+    </div>
+
+    <div class="input-group">
+      <div class="label-row">
+        <label>Email Address</label>
+        <span id="emailReq" class="req-msg">Email Address is required</span>
+      </div>
+      <input type="email" id="email" placeholder="Enter your email address">
+    </div>
+
+    <div class="input-group">
+      <div class="label-row">
+        <label>Phone Number</label>
+        <span id="phoneReq" class="req-msg">Phone Number is required</span>
+      </div>
+      <input type="text" id="phone" placeholder="Enter 10-digit phone number" 
+        oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
+    </div>
+
+    <div class="input-group">
+      <div class="label-row">
+        <label>Password</label>
+        <span id="passReq" class="req-msg">Password is required</span>
+      </div>
+      <input type="password" id="password" placeholder="Create a password">
+    </div>
+
+    <div class="input-group">
+      <div class="label-row">
+        <label>Confirm Password</label>
+        <span id="confirmPassReq" class="req-msg">Passwords do not match</span>
+      </div>
+      <input type="password" id="confirmPassword" placeholder="Confirm your password">
+    </div>
+
+    <button type="submit">SIGN UP</button>
+  </form>
+
+  <div class="login-link">
+    Already have an account? <a href="/accounts/login/">Sign in</a>
+  </div>
+
+  <div id="msg"></div>
+</div>
+
+<script>
+async function validateForm() {
+  const nameField = document.getElementById("fullName");
+  const emailField = document.getElementById("email");
+  const phoneField = document.getElementById("phone");
+  const passField = document.getElementById("password");
+  const confirmPassField = document.getElementById("confirmPassword");
+  
+  const nameReq = document.getElementById("nameReq");
+  const emailReq = document.getElementById("emailReq");
+  const phoneReq = document.getElementById("phoneReq");
+  const passReq = document.getElementById("passReq");
+  const confirmPassReq = document.getElementById("confirmPassReq");
+  const msg = document.getElementById("msg");
+
+  nameReq.style.display = "none";
+  emailReq.style.display = "none";
+  phoneReq.style.display = "none";
+  passReq.style.display = "none";
+  confirmPassReq.style.display = "none";
+  msg.innerHTML = "";
+  
+  let valid = true;
+
+  if (!nameField.value.trim()) {
+    nameReq.style.display = "inline";
+    valid = false;
+  }
+  if (!emailField.value.trim() || !emailField.value.includes("@")) {
+    emailReq.style.display = "inline";
+    valid = false;
+  }
+  if (!phoneField.value.trim() || phoneField.value.trim().length !== 10) {
+    phoneReq.style.display = "inline";
+    valid = false;
+  }
+  if (!passField.value.trim()) {
+    passReq.style.display = "inline";
+    valid = false;
+  }
+  if (passField.value.trim() !== confirmPassField.value.trim()) {
+    confirmPassReq.style.display = "inline";
+    valid = false;
+  }
+
+  if (!valid) return;
+
+  registerUser({
+    first_name: nameField.value.trim(),
+    email: emailField.value.trim(),
+    phone: phoneField.value.trim(),
+    password: passField.value.trim()
+  });
+}
+
+async function registerUser(payload) {
+  const msg = document.getElementById("msg");
+  try {
+    const csrf = getCookie('csrftoken');
+    const response = await fetch('/accounts/signup/', {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrf || ''
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      msg.innerHTML = "<div style='color:#059669; font-size:13px;'>Account created successfully! Redirecting to Login...</div>";
+      setTimeout(() => { 
+        window.location.href = result.redirect_url || "/accounts/login/";
+      }, 1000);
+    } else {
+      msg.innerHTML = `<div style='color:#dc2626; font-size:13px;'>${result.detail || "Registration failed"}</div>`;
+    }
+  } catch (error) {
+    msg.innerHTML = "<div style='color:#dc2626; font-size:13px;'>Connection failed. Please try again.</div>";
+  }
+}
+
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+</script>
+
+</body>
+</html>

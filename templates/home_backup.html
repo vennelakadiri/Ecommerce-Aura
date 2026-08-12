@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura | Boutique Home</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+  
+  body { 
+    background: url('https://png.pngtree.com/background/20230519/original/pngtree-store-with-hanging-clothing-in-a-high-end-environment-picture-image_2654941.jpg') no-repeat center center fixed;
+    background-size: cover;
+  }
+
+  .overlay {
+    background: rgba(0, 0, 0, 0.7);
+    min-height: 100vh;
+    padding-bottom: 40px;
+  }
+
+  /* --- NAVBAR STYLES --- */
+  .navbar {
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 5%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .nav-left { display: flex; align-items: center; gap: 50px; }
+  .nav-logo { font-size: 28px; font-weight: bold; letter-spacing: 4px; color: #b38b59; text-decoration: none; }
+ .nav-links { 
+    display: flex; 
+    gap: 35px; 
+    list-style: none; 
+    align-items: center; 
+    position: static; /* IMPORTANT */
+}
+  .nav-links a { text-decoration: none; color: #333; font-size: 13px; font-weight: 700; text-transform: uppercase; transition: 0.3s; }
+  .nav-links a:hover { color: #b38b59; }
+  .nav-right { display: flex; align-items: center; gap: 25px; }
+
+/* This creates a "bridge" between the link and the dropdown */
+ .nav-links > li { 
+  position: relative;
+  padding: 20px 0;
+  margin: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+/* Keep dropdown open */
+.nav-links > li:hover .mega-menu {
+  display: flex;
+}
+
+/* FIXED mega menu */
+.mega-menu {
+    position: fixed;   /* CHANGE from absolute -> fixed */
+    top: 70px;         /* adjust based on navbar height */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 95vw;           /* Slightly less than full screen width for a clean look */
+    max-width: 1200px;     /* Matches your main container width */
+    background: #ffffff;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    display: none; 
+    padding: 30px 5%;
+    z-index: 3000;
+    border-top: 1px solid #eee;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+/* INVISIBLE BRIDGE (critical fix) */
+.nav-links > li::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 20px;
+}
+  .search-bar {
+    background: #fdfaf5;
+    border: 1px solid #eee;
+    padding: 10px 15px;
+    border-radius: 4px;
+    width: 300px;
+    font-size: 13px;
+    outline: none;
+  }
+
+  .nav-icon-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #333;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .nav-icon-group span { font-size: 22px; margin-bottom: 2px; }
+  .nav-icon-group:hover { color: #b38b59; }
+
+  /* --- MAIN CONTAINER --- */
+  .main-container {
+    width: 95%;
+    max-width: 1300px;
+    margin: 30px auto;
+    background: #fdfaf5;
+    border-radius: 40px;
+    padding: 40px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  }
+
+  .welcome-msg { 
+    text-align: center; 
+    font-size: 32px; 
+    font-weight: 700; 
+    color: #222; 
+    margin-bottom: 30px;
+    letter-spacing: -1px;
+  }
+  .welcome-msg span { color: #b38b59; }
+
+  /* --- HERO SLIDER --- */
+  .slider-container {
+    width: 100%;
+    height: 450px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 25px;
+    margin-bottom: 10px;
+  }
+  .slides {
+    display: flex;
+    width: 400%;
+    height: 100%;
+    transition: transform 0.8s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+  }
+  .slide {
+    width: 25%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    padding-left: 60px;
+    position: relative;
+  }
+  .slide::before {
+    content: '';
+    position: absolute;
+    top:0; left:0; width:100%; height:100%;
+    background: linear-gradient(90deg, rgba(0,0,0,0.4) 0%, transparent 60%);
+  }
+  .hero-content { position: relative; z-index: 2; }
+  .hero-content h2 { color: white; font-size: 48px; margin-bottom: 20px; text-shadow: 2px 2px 15px rgba(0,0,0,0.5); }
+  .explore-btn {
+    padding: 15px 35px;
+    background: #b38b59;
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 700;
+    transition: 0.3s;
+  }
+  .slider-dots { display: flex; justify-content: center; gap: 12px; margin-bottom: 30px; }
+  .dot { width: 12px; height: 12px; background: #ccc; border-radius: 50%; cursor: pointer; transition: 0.3s; }
+  .dot.active { background: #b38b59; width: 30px; border-radius: 10px; }
+  .brand-dot {
+    width: 12px;
+    height: 12px;
+    background: #ccc; /* Light grey when inactive */
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s;
+    margin: 0 6px;
+    display: inline-block;
+  }
+  .brand-dot.active {
+    background: #b38b59; /* Your theme gold when active */
+    width: 30px; /* Stretches when active just like the top slider */
+    border-radius: 10px;
+  }
+  /* --- SHARED CARD STYLES --- */
+  .section-title { font-size: 24px; margin: 30px 0 20px; color: #222; border-left: 5px solid #b38b59; padding-left: 15px; }
+  .category-row { display: flex; gap: 15px; margin-bottom: 40px; }
+  .cat-card {
+    flex: 1;
+    background: white;
+    border-radius: 15px;
+    padding-bottom: 15px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: 0.3s;
+    overflow: hidden;
+  }
+  .cat-card img { width: 100%; height: 320px; object-fit: cover; }
+  .cat-name { margin-top: 15px; font-weight: 600; color: #444; text-transform: uppercase; font-size: 14px; }
+  .cat-card:hover { transform: translateY(-10px); }
+
+  /* --- BRAND SLIDER (16 images, 4 dots) --- */
+  .brand-slider-container { width: 100%; overflow: hidden; position: relative; }
+  .brand-slides { display: flex; width: 400%; transition: transform 0.6s ease-in-out; }
+  .brand-group { width: 25%; display: flex; gap: 15px; padding: 10px 0; }
+
+  /* --- PRODUCT GRID --- */
+  .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .product-card { background: white; border-radius: 15px; padding-bottom: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+  .product-img { width: 100%; height: 220px; object-fit: cover; border-radius: 15px 15px 0 0; }
+  .p-name { padding: 10px 10px 5px; font-size: 14px; color: #333; }
+  .p-price { font-weight: bold; color: #222; margin-bottom: 10px; display: block; }
+  .add-btn { width: 85%; padding: 10px; background: #b38b59; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+
+.mega-col { flex: 1; }
+.mega-col h4 {
+    font-size: 14px;
+    color: #b38b59; /* Your Theme Gold */
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+.mega-col h4.red-heading { 
+    color: #b38b59; 
+    margin-top: 20px; 
+}
+.mega-col ul { list-style: none; }
+.mega-col ul li { margin-bottom: 8px; }
+.mega-col ul li a {
+    text-decoration: none;
+    color: #555;
+    font-size: 13px;
+    font-weight: 400;
+    text-transform: capitalize;
+    transition: 0.2s;
+}
+.mega-col ul li a:hover {
+    color: #000;
+    font-weight: 600;
+}
+.menu-column { flex: 1; }
+.menu-column h4 {
+    color: #b38b59; /* Your Aura Gold */
+    font-size: 14px;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 5px;
+}
+.menu-column ul { list-style: none; padding: 0; }
+
+.menu-column ul li { margin-bottom: 8px; }
+
+.menu-column ul li a {
+    text-decoration: none;
+    color: #555;
+    font-size: 13px;
+    font-weight: 400;
+    text-transform: none; /* Keep names like "T-Shirts" normal */
+    transition: 0.2s;
+}
+
+.menu-column ul li a:hover {
+    color: #b38b59;
+    padding-left: 5px; /* Subtle slide effect */
+}
+
+/* Section spacing for columns with multiple headers */
+.menu-section { margin-bottom: 25px; }
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .product-grid { grid-template-columns: repeat(3, 1fr); }
+  .category-row { flex-wrap: wrap; }
+  .cat-card { flex: 1 1 calc(50% - 15px); }
+}
+
+@media (max-width: 768px) {
+  .navbar { flex-direction: column; padding: 15px; }
+  .nav-left { flex-direction: column; gap: 20px; }
+  .nav-links { gap: 20px; }
+  .search-bar { width: 200px; }
+  .main-container { width: 95%; padding: 20px; }
+  .welcome-msg { font-size: 24px; }
+  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+  .category-row { flex-direction: column; }
+  .cat-card { width: 100%; }
+  .hero-content h2 { font-size: 32px; }
+}
+
+@media (max-width: 480px) {
+  .nav-right { gap: 15px; }
+  .nav-icon-group span { font-size: 18px; }
+  .nav-icon-group { font-size: 9px; }
+  .product-grid { grid-template-columns: 1fr; }
+  .hero-content h2 { font-size: 24px; }
+  .slider-container { height: 300px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-left">
+    <a href="/" class="nav-logo"><span class="material-symbols-outlined" style="font-size: 28px; color: #b38b59; margin-right: 10px;">home</span>AURA</a>
+    <ul class="nav-links">
+      <li>
+        <a href="/store/products/?category=men">Men</a>
+        <div class="mega-menu">
+          <div class="mega-col">
+            <h4>Topwear</h4>
+            <ul>
+              <li><a href="/store/products/?category=men&subcategory=t-shirts">T-Shirts</a></li>
+              <li><a href="/store/products/?category=men&subcategory=casual-shirts">Casual Shirts</a></li>
+              <li><a href="/store/products/?category=men&subcategory=formal-shirts">Formal Shirts</a></li>
+              <li><a href="/store/products/?category=men&subcategory=polo-shirts">Polo Shirts</a></li>
+              <li><a href="/store/products/?category=men&subcategory=sweatshirts">Sweatshirts</a></li>
+              <li><a href="/store/products/?category=men&subcategory=sweaters">Sweaters</a></li>
+              <li><a href="/store/products/?category=men&subcategory=jackets">Jackets</a></li>
+              <li><a href="/store/products/?category=men&subcategory=blazers">Blazers & Coats</a></li>
+              <li><a href="/store/products/?category=men&subcategory=suits">Suits</a></li>
+              <li><a href="/store/products/?category=men&subcategory=jackets">Rain Jackets</a></li>
+            </ul>
+            <h4 class="red-heading">Indian & Festive Wear</h4>
+            <ul>
+              <li><a href="/store/products/?category=men&subcategory=kurtas">Kurtas & Kurta Sets</a></li>
+              <li><a href="/store/products/?category=men&subcategory=sherwanis">Sherwanis</a></li>
+              <li><a href="/store/products/?category=men&subcategory=nehru-jackets">Nehru Jackets</a></li>
+              <li><a href="/store/products/?category=men&subcategory=dhotis">Dhotis</a></li>
+            </ul>
+          </div>
+
+          <div class="mega-col">
+            <h4>Bottomwear</h4>
+            <ul>
+              <li><a href="/store/products/?category=men&subcategory=jeans">Jeans</a></li>
+              <li><a href="/store/products/?category=men&subcategory=casual-trousers">Casual Trousers</a></li>
+              <li><a href="/store/products/?category=men&subcategory=formal-trousers">Formal Trousers</a></li>
+              <li><a href="/store/products/?category=men&subcategory=chinos">Chinos</a></li>
+              <li><a href="/store/products/?category=men&subcategory=shorts">Shorts</a></li>
+              <li><a href="/store/products/?category=men&subcategory=track-pants">Track Pants & Joggers</a></li>
+              <li><a href="/store/products/?category=men&subcategory=cargo-pants">Cargo Pants</a></li>
+            </ul>
+            <h4 class="red-heading">Innerwear & Sleepwear</h4>
+            <ul>
+              <li><a href="/store/products/?category=men&subcategory=briefs">Briefs & Trunks</a></li>
+              <li><a href="/store/products/?category=men&subcategory=boxers">Boxers</a></li>
+              <li><a href="/store/products/?category=men&subcategory=vests">Vests</a></li>
+              <li><a href="/store/products/?category=men&subcategory=sleepwear">Sleepwear & Loungewear</a></li>
+              <li><a href="/store/products/?category=men&subcategory=thermals">Thermals</a></li>
+            </ul>
+            <h4 class="red-heading">Plus Size</h4>
+          </div>
+
+          <div class="mega-col">
+            <h4>Footwear</h4>
+            <ul>
+              <li><a href="/store/products/?category=men&subcategory=casual-shoes">Casual Shoes</a></li>
+              <li><a href="/store/products/?category=men&subcategory=sports-shoes">Sports Shoes</a></li>
+              <li><a href="/store/products/?category=men&subcategory=formal-shoes">Formal Shoes</a></li>
+              <li><a href="/store/products/?category=men&subcategory=sneakers">Sneakers</a></li>
+              <li><a href="/store/products/?category=men&subcategory=sandals">Sandals & Floaters</a></li>
+              <li><a href="/store/products/?category=men&subcategory=flip-flops">Flip Flops</a></li>
+              <li><a href="/store/products/?category=men&subcategory=socks">Socks</a></li>
+            </ul>
+            <h4 class="red-heading">Personal Care & Grooming</h4>
+            <h4 class="red-heading">Sunglasses & Frames</h4>
+            <h4 class="red-heading">Watches</h4>
+          </div>
+
+          <div class="mega-col">
+            <h4>Sports & Active Wear</h4>
+            <ul>
+              <li><a href="/store/products/?category=men&subcategory=shorts">Sports Shoes</a></li>
+              <li><a href="/store/products/?category=men&subcategory=shorts">Sports Sandals</a></li>
+              <li><a href="/store/products/?category=men&subcategory=t-shirts">Active T-Shirts</a></li>
+              <li><a href="/store/products/?category=men&subcategory=trousers">Track Pants & Shorts</a></li>
+              <li><a href="/store/products/?category=men&subcategory=jackets">Tracksuits</a></li>
+              <li><a href="/store/products/?category=men&subcategory=jackets">Jackets & Sweatshirts</a></li>
+              <li><a href="/store/products/?category=men&subcategory=wallets-accessories">Sports Accessories</a></li>
+              <li><a href="/store/products/?category=men&subcategory=dresses">Swimwear</a></li>
+            </ul>
+            <h4 class="red-heading">Gadgets</h4>
+            <ul>
+              <li><a href="/store/products/?category=men&subcategory=watches-accessories">Smart Wearables</a></li>
+              <li><a href="/store/products/?category=men&subcategory=watches-accessories">Fitness Gadgets</a></li>
+              <li><a href="/store/products/?category=men&subcategory=watches-accessories">Headphones</a></li>
+              <li><a href="/store/products/?category=men&subcategory=watches-accessories">Speakers</a></li>
+            </ul>
+          </div>
+
+          <div class="mega-col">
+            <h4>Fashion Accessories</h4>
+            <ul>
+              <li><a href="/store/products/?category=men&subcategory=wallets-accessories">Wallets</a></li>
+              <li><a href="/store/products/?category=men&subcategory=belts-accessories">Belts</a></li>
+              <li><a href="/store/products/?category=men&subcategory=perfumes">Perfumes & Body Mists</a></li>
+              <li><a href="/store/products/?category=men&subcategory=trimmers">Trimmers</a></li>
+              <li><a href="/store/products/?category=men&subcategory=deodorants">Deodorants</a></li>
+              <li><a href="/store/products/?category=men&subcategory=ties">Ties</a></li>
+              <li><a href="/store/products/?category=men&subcategory=cufflinks">Cufflinks & Pockets</a></li>
+              <li><a href="/store/products/?category=men&subcategory=accessory-gift-sets">Accessories Gift Sets</a></li>
+              <li><a href="/store/products/?category=men&subcategory=caps-hats">Caps & Hats</a></li>
+              <li><a href="/store/products/?category=men&subcategory=mufflers">Mufflers, Scarves & Gloves</a></li>
+              <li><a href="/store/products/?category=men&subcategory=phone-cases">Phone Cases</a></li>
+              <li><a href="/store/products/?category=men&subcategory=rings-wristwear">Rings & Wristwear</a></li>
+              <li><a href="/store/products/?category=men&subcategory=helmets">Helmets</a></li>
+            </ul>
+            <h4 class="red-heading">Bags & Backpacks</h4>
+            <h4 class="red-heading">Luggages & Trolleys</h4>
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <a href="/store/products/?category=women">Women</a>
+        <div class="mega-menu">
+          <div class="mega-col">
+            <h4>Indian & Fusion Wear</h4>
+            <ul>
+              <li><a href="/store/products/?category=women&subcategory=kurtis-women">Kurtas & Suits</a></li>
+              <li><a href="/store/products/?category=women&subcategory=kurtis-women">Kurtis, Tunics & Tops</a></li>
+              <li><a href="/store/products/?category=women&subcategory=sarees-women">Sarees</a></li>
+              <li><a href="/store/products/?category=women&subcategory=kurtis-women">Salwar Kameez</a></li>
+              <li><a href="/store/products/?category=women&subcategory=kurtis-women">Ethnic Wear</a></li>
+              <li><a href="/store/products/?category=women&subcategory=skirts-women">Leggings, Salwars & Churidars</a></li>
+              <li><a href="/store/products/?category=women&subcategory=skirts-women">Skirts & Palazzos</a></li>
+              <li><a href="/store/products/?category=women&subcategory=dresses">Dress Materials</a></li>
+              <li><a href="/store/products/?category=women&subcategory=dresses">Lehenga choli</a></li>
+            </ul>
+            <h4 class="red-heading">Western Wear</h4>
+            <ul>
+              <li><a href="/store/products/?category=women&subcategory=dresses">Dresses</a></li>
+              <li><a href="/store/products/?category=women&subcategory=tops">Tops</a></li>
+              <li><a href="/store/products/?category=women&subcategory=jeans-women">Jeans</a></li>
+              <li><a href="/store/products/?category=women&subcategory=skirts-women">Trousers & Capris</a></li>
+              <li><a href="/store/products/?category=women&subcategory=skirts-women">Shorts & Skirts</a></li>
+              <li><a href="/store/products/?category=women&subcategory=dresses">Jumpsuits & Rompers</a></li>
+              <li><a href="/store/products/?category=women&subcategory=blazers-women">Blazers & Waistcoats</a></li>
+              <li><a href="/store/products/?category=women&subcategory=dresses">Swim & Beachwear</a></li>
+            </ul>
+          </div>
+
+          <div class="mega-col">
+            <h4>Lingerie & Sleepwear</h4>
+            <ul>
+              <li><a href="/store/products/?category=women&subcategory=bras-women">Bras</a></li>
+              <li><a href="/store/products/?category=women&subcategory=briefs-women">Briefs</a></li>
+              <li><a href="/store/products/?category=women&subcategory=shapewear-women">Shapewear</a></li>
+              <li><a href="/store/products/?category=women&subcategory=nightwear-women">Sleepwear & Loungewear</a></li>
+              <li><a href="/store/products/?category=women&subcategory=swimwear-women">Swimwear</a></li>
+              <li><a href="/store/products/?category=women&subcategory=lingerie-sets-women">Lingerie Sets</a></li>
+            </ul>
+            <h4 class="red-heading">Sports & Active Wear</h4>
+            <ul>
+              <li><a href="/store/products/?category=women&subcategory=sports-tops-women">Sports Tops & T-Shirts</a></li>
+              <li><a href="/store/products/?category=women&subcategory=sports-bottoms-women">Sports Bottoms</a></li>
+              <li><a href="/store/products/?category=women&subcategory=track-pants-women">Track Pants & Shorts</a></li>
+              <li><a href="/store/products/?category=women&subcategory=sports-shoes-women">Sports Shoes</a></li>
+              <li><a href="/store/products/?category=women&subcategory=sports-accessories-women">Sports Accessories</a></li>
+            </ul>
+          </div>
+
+          <div class="mega-col">
+            <h4>Footwear</h4>
+            <ul>
+              <li><a href="/store/products/?category=women&subcategory=flats">Flats</a></li>
+              <li><a href="/store/products/?category=women&subcategory=heels">Heels</a></li>
+              <li><a href="/store/products/?category=women&subcategory=sneakers-women">Sneakers</a></li>
+              <li><a href="/store/products/?category=women&subcategory=sandals-women">Sandals</a></li>
+              <li><a href="/store/products/?category=women&subcategory=flip-flops-women">Flip Flops</a></li>
+              <li><a href="/store/products/?category=women&subcategory=boots-women">Boots</a></li>
+              <li><a href="/store/products/?category=women&subcategory=sports-shoes-women">Sports Shoes</a></li>
+            </ul>
+            <h4 class="red-heading">Bags & Wallets</h4>
+            <ul>
+              <li><a href="/store/products/?category=women&subcategory=handbags">Handbags</a></li>
+              <li><a href="/store/products/?category=women&subcategory=clutches-women">Clutches</a></li>
+              <li><a href="/store/products/?category=women&subcategory=backpacks-women">Backpacks</a></li>
+              <li><a href="/store/products/?category=women&subcategory=wallets-women">Wallets</a></li>
+              <li><a href="/store/products/?category=women&subcategory=travel-bags-women">Travel Bags</a></li>
+            </ul>
+          </div>
+
+          <div class="mega-col">
+            <h4>Jewellery</h4>
+            <ul>
+              <li><a href="/store/products/?category=women&subcategory=fine-jewellery">Fine Jewellery</a></li>
+              <li><a href="/store/products/?category=women&subcategory=fashion-jewellery">Fashion Jewellery</a></li>
+              <li><a href="/store/products/?category=women&subcategory=earrings-women">Earrings</a></li>
+              <li><a href="/store/products/?category=women&subcategory=necklaces-women">Necklaces</a></li>
+              <li><a href="/store/products/?category=women&subcategory=bracelets-women">Bracelets</a></li>
+              <li><a href="/store/products/?category=women&subcategory=rings-women">Rings</a></li>
+            </ul>
+            <h4 class="red-heading">Beauty & Personal Care</h4>
+            <ul>
+              <li><a href="/store/products/?category=women&subcategory=makeup">Makeup</a></li>
+              <li><a href="/store/products/?category=women&subcategory=skincare">Skincare</a></li>
+              <li><a href="/store/products/?category=women&subcategory=haircare">Haircare</a></li>
+              <li><a href="/store/products/?category=women&subcategory=fragrances">Fragrances</a></li>
+              <li><a href="/store/products/?category=women&subcategory=bath-body-women">Bath & Body</a></li>
+            </ul>
+          </div>
+
+          <div class="mega-col">
+            <h4>Watches & Eyewear</h4>
+            <ul>
+              <li><a href="/store/products/?category=women&subcategory=watches-women">Watches</a></li>
+              <li><a href="/store/products/?category=women&subcategory=sunglasses-women">Sunglasses</a></li>
+              <li><a href="/store/products/?category=women&subcategory=eyeglasses-women">Eyeglasses</a></li>
+              <li><a href="/store/products/?category=women&subcategory=contact-lenses-women">Contact Lenses</a></li>
+            </ul>
+            <h4 class="red-heading">Accessories</h4>
+            <ul>
+              <li><a href="/store/products/?category=women&subcategory=scarves-women">Scarves, Stoles & Shawls</a></li>
+              <li><a href="/store/products/?category=women&subcategory=belts-women">Belts</a></li>
+              <li><a href="/store/products/?category=women&subcategory=hats-women">Hats & Caps</a></li>
+              <li><a href="/store/products/?category=women&subcategory=gloves-women">Gloves</a></li>
+              <li><a href="/store/products/?category=women&subcategory=umbrellas-women">Umbrellas</a></li>
+              <li><a href="/store/products/?category=women&subcategory=keychains-women">Keychains</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <a href="/store/products/?category=kids">Kids</a>
+        <div class="mega-menu">
+          <div class="mega-col">
+            <h4>Boys Clothing</h4>
+            <ul>
+              <li><a href="/store/products/?category=kids&subcategory=boys-tshirts&brand=gap">Gap Boys T-Shirts</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=boys-tshirts&brand=hm">H&M Boys T-Shirts</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=boys-tshirts&brand=uspa-kids">USPA Boys T-Shirts</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=boys-tshirts&brand=hrx">HRX Boys T-Shirts</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=boys-tshirts&brand=pantaloons">Pantaloons Boys T-Shirts</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=boys-shirts">Boys Shirts</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=boys-shorts">Boys Shorts</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=boys-jeans">Boys Jeans</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=boys-trousers">Boys Trousers</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=boys-sets">Clothing Sets</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=boys-ethnic">Ethnic Wear</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=boys-track-pants">Track Pants & Pyjamas</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=boys-jackets">Jacket, Sweater & Sweatshirts</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=boys-party">Party Wear</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=boys-innerwear">Innerwear & Thermals</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=boys-nightwear">Nightwear & Loungewear</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=boys-packs">Value Packs</a></li>
+            </ul>
+          </div>
+
+          <div class="mega-col">
+            <h4>Girls Clothing</h4>
+            <ul>
+              <li><a href="/store/products/?category=kids&subcategory=girls-dresses&brand=gap">Gap Girls Dresses</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=girls-dresses&brand=hm">H&M Girls Dresses</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=girls-dresses&brand=zara-kids">Zara Girls Dresses</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=girls-dresses&brand=uspa-kids">USPA Girls Dresses</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=girls-dresses&brand=mothercare">Mothercare Girls Dresses</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=girls-tops">Girls Tops</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=girls-tshirts">Girls Tshirts</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=girls-sets">Clothing Sets</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=girls-lehenga">Lehenga choli</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=girls-kurta">Kurta Sets</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=girls-party">Party wear</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=girls-dungarees">Dungarees & Jumpsuits</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=girls-skirts">Skirts & shorts</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=girls-leggings">Tights & Leggings</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=girls-jeans">Jeans, Trousers & Capris</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=girls-jackets">Jacket, Sweater & Sweatshirts</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=girls-innerwear">Innerwear & Thermals</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=girls-nightwear">Nightwear & Loungewear</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=girls-packs">Value Packs</a></li>
+            </ul>
+          </div>
+
+          <div class="mega-col">
+            <h4>Footwear</h4>
+            <ul>
+              <li><a href="/store/products/?category=kids&subcategory=kids-casual-shoes">Casual Shoes</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=kids-flipflops">Flipflops</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=kids-sports-shoes">Sports Shoes</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=kids-flats">Flats</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=kids-sandals">Sandals</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=kids-heels">Heels</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=kids-school-shoes">School Shoes</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=kids-socks">Socks</a></li>
+            </ul>
+
+            <h4 class="red-heading">Toys & Games</h4>
+            <ul>
+              <li><a href="/store/products/?category=kids&subcategory=learning-toys">Learning & Development</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=activity-toys">Activity Toys</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=soft-toys">Soft Toys</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=action-figures">Action Figure / Play set</a></li>
+            </ul>
+          </div>
+
+          <div class="mega-col">
+            <h4>Infants</h4>
+            <ul>
+              <li><a href="/store/products/?category=kids&subcategory=bodysuits">Bodysuits</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=rompers">Rompers & Sleepsuits</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=infants-sets">Clothing Sets</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=infants-tops">Tshirts & Tops</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=infants-dresses">Dresses</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=infants-bottoms">Bottom wear</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=infants-winter">Winter Wear</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=infants-innerwear">Innerwear & Sleepwear</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=infants-care">Infant Care</a></li>
+            </ul>
+
+            <h4 class="red-heading">Home & Bath</h4>
+            <h4 class="red-heading">Personal Care</h4>
+          </div>
+
+          <div class="mega-col">
+            <h4>Kids Accessories</h4>
+            <ul>
+              <li><a href="/store/products/?category=kids&subcategory=kids-bags">Bags & Backpacks</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=kids-watches">Watches</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=kids-jewellery">Jewellery & Hair accessory</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=kids-sunglasses">Sunglasses</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=kids-masks">Masks & Protective Gears</a></li>
+              <li><a href="/store/products/?category=kids&subcategory=kids-caps">Caps & Hats</a></li>
+            </ul>
+
+            <h4 class="red-heading">Brands</h4>
+            <ul>
+              <li><a href="/store/products/?category=kids&brand=hm">H&M</a></li>
+              <li><a href="/store/products/?category=kids&brand=max-kids">Max Kids</a></li>
+              <li><a href="/store/products/?category=kids&brand=pantaloons">Pantaloons</a></li>
+              <li><a href="/store/products/?category=kids&brand=benetton">United Colors Of Benetton</a></li>
+              <li><a href="/store/products/?category=kids&brand=yk">YK</a></li>
+              <li><a href="/store/products/?category=kids&brand=uspa-kids">U.S. Polo Assn. Kids</a></li>
+              <li><a href="/store/products/?category=kids&brand=mothercare">Mothercare</a></li>
+              <li><a href="/store/products/?category=kids&brand=hrx">HRX</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <a href="/store/products/?category=home">Home</a>
+        <div class="mega-menu">
+          <div class="mega-col">
+            <h4>Bed Linen & Furnishing</h4>
+            <ul>
+              <li><a href="/store/products/?category=home&subcategory=bedsheets&brand=home-center">Home Center Bedsheets</a></li>
+              <li><a href="/store/products/?category=home&subcategory=bedsheets&brand=westside">Westside Bedsheets</a></li>
+              <li><a href="/store/products/?category=home&subcategory=bedsheets&brand=raymond">Raymond Bedsheets</a></li>
+              <li><a href="/store/products/?category=home&subcategory=bedsheets&brand= bomba">Bomba Bedsheets</a></li>
+              <li><a href="/store/products/?category=home&subcategory=bedsheets&brand=portico">Portico Bedsheets</a></li>
+              <li><a href="/store/products/?category=home&subcategory=mattress-protectors">Mattress Protectors</a></li>
+              <li><a href="/store/products/?category=home&subcategory=bedding-sets">Bedding Sets</a></li>
+              <li><a href="/store/products/?category=home&subcategory=blankets">Blankets, Quilts & Dohars</a></li>
+              <li><a href="/store/products/?category=home&subcategory=pillows">Pillows & Pillow Covers</a></li>
+              <li><a href="/store/products/?category=home&subcategory=bed-covers">Bed Covers</a></li>
+              <li><a href="/store/products/?category=home&subcategory=diwan-sets">Diwan Sets</a></li>
+              <li><a href="/store/products/?category=home&subcategory=chair-pads">Chair Pads & Covers</a></li>
+              <li><a href="/store/products/?category=home&subcategory=sofa-covers">Sofa Covers</a></li>
+            </ul>
+
+            <h4 class="red-heading">Flooring</h4>
+            <ul>
+              <li><a href="/store/products/?category=home&subcategory=floor-runners">Floor Runners</a></li>
+              <li><a href="/store/products/?category=home&subcategory=carpets">Carpets</a></li>
+              <li><a href="/store/products/?category=home&subcategory=floor-mats">Floor Mats & Dhurries</a></li>
+              <li><a href="/store/products/?category=home&subcategory=door-mats">Door Mats</a></li>
+            </ul>
+          </div>
+
+          <div class="mega-col">
+            <h4>Bath</h4>
+            <ul>
+              <li><a href="/store/products/?category=home&subcategory=bath-towels">Bath Towels</a></li>
+              <li><a href="/store/products/?category=home&subcategory=hand-towels">Hand & Face Towels</a></li>
+              <li><a href="/store/products/?category=home&subcategory=beach-towels">Beach Towels</a></li>
+              <li><a href="/store/products/?category=home&subcategory=towels-set">Towels Set</a></li>
+              <li><a href="/store/products/?category=home&subcategory=bath-rugs">Bath Rugs</a></li>
+              <li><a href="/store/products/?category=home&subcategory=bath-robes">Bath Robes</a></li>
+              <li><a href="/store/products/?category=home&subcategory=bathroom-accessories">Bathroom Accessories</a></li>
+              <li><a href="/store/products/?category=home&subcategory=shower-curtains">Shower Curtains</a></li>
+            </ul>
+
+            <h4 class="red-heading">Lamps & Lighting</h4>
+            <ul>
+              <li><a href="/store/products/?category=home&subcategory=floor-lamps">Floor Lamps</a></li>
+              <li><a href="/store/products/?category=home&subcategory=ceiling-lamps">Ceiling Lamps</a></li>
+              <li><a href="/store/products/?category=home&subcategory=table-lamps">Table Lamps</a></li>
+              <li><a href="/store/products/?category=home&subcategory=wall-lamps">Wall Lamps</a></li>
+              <li><a href="/store/products/?category=home&subcategory=outdoor-lamps">Outdoor Lamps</a></li>
+              <li><a href="/store/products/?category=home&subcategory=string-lights">String Lights</a></li>
+            </ul>
+          </div>
+
+          <div class="mega-col">
+            <h4>Home Décor</h4>
+            <ul>
+              <li><a href="/store/products/?category=home&subcategory=plants">Plants & Planters</a></li>
+              <li><a href="/store/products/?category=home&subcategory=aromas">Aromas & Candles</a></li>
+              <li><a href="/store/products/?category=home&subcategory=clocks">Clocks</a></li>
+              <li><a href="/store/products/?category=home&subcategory=mirrors">Mirrors</a></li>
+              <li><a href="/store/products/?category=home&subcategory=wall-decor">Wall Décor</a></li>
+              <li><a href="/store/products/?category=home&subcategory=festive-decor">Festive Decor</a></li>
+              <li><a href="/store/products/?category=home&subcategory=pooja">Pooja Essentials</a></li>
+              <li><a href="/store/products/?category=home&subcategory=wall-shelves">Wall Shelves</a></li>
+              <li><a href="/store/products/?category=home&subcategory=fountains">Fountains</a></li>
+              <li><a href="/store/products/?category=home&subcategory=showpieces">Showpieces & Vases</a></li>
+              <li><a href="/store/products/?category=home&subcategory=ottoman">Ottoman</a></li>
+            </ul>
+
+            <h4 class="red-heading">Cushions & Cushion Covers</h4>
+            <h4 class="red-heading">Curtains</h4>
+          </div>
+
+          <div class="mega-col">
+            <h4>Furniture</h4>
+
+            <h4 class="red-heading">Home Gift Sets</h4>
+
+            <h4 class="red-heading">Kitchen & Table</h4>
+            <ul>
+              <li><a href="/store/products/?category=home&subcategory=table-runners">Table Runners</a></li>
+              <li><a href="/store/products/?category=home&subcategory=dinnerware">Dinnerware & Serveware</a></li>
+              <li><a href="/store/products/?category=home&subcategory=cups-mugs">Cups and Mugs</a></li>
+              <li><a href="/store/products/?category=home&subcategory=bakeware">Bakeware & Cookware</a></li>
+              <li><a href="/store/products/?category=home&subcategory=kitchen-storage">Kitchen Storage & Tools</a></li>
+              <li><a href="/store/products/?category=home&subcategory=bar-drinkware">Bar & Drinkware</a></li>
+              <li><a href="/store/products/?category=home&subcategory=table-covers">Table Covers & Furnishings</a></li>
+            </ul>
+          </div>
+
+          <div class="mega-col">
+            <h4>Storage</h4>
+            <ul>
+              <li><a href="/store/products/?category=home&subcategory=bins">Bins</a></li>
+              <li><a href="/store/products/?category=home&subcategory=hangers">Hangers</a></li>
+              <li><a href="/store/products/?category=home&subcategory=organisers">Organisers</a></li>
+              <li><a href="/store/products/?category=home&subcategory=hooks">Hooks & Holders</a></li>
+              <li><a href="/store/products/?category=home&subcategory=laundry-bags">Laundry Bags</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <a href="/store/products/?category=beauty">Beauty</a>
+        <div class="mega-menu">
+          <div class="mega-col">
+            <h4>Makeup</h4>
+            <ul>
+              <li><a href="/store/products/?category=beauty&subcategory=lipstick&brand=lakme">Lakme Lipstick</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=lipstick&brand=maybelline">Maybelline Lipstick</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=lipstick&brand=loreal">Loreal Lipstick</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=lipstick&brand=mac">M.A.C Lipstick</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=lipstick&brand=nykaa">Nykaa Lipstick</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=lipstick&brand=forest-essentials">Forest Essentials Lipstick</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=lip-gloss">Lip Gloss</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=lip-liner">Lip Liner</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=mascara">Mascara</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=eyeliner">Eyeliner</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=kajal">Kajal</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=eyeshadow">Eyeshadow</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=foundation">Foundation</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=primer">Primer</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=concealer">Concealer</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=compact">Compact</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=nail-polish">Nail Polish</a></li>
+            </ul>
+          </div>
+
+          <div class="mega-col">
+            <h4>Skincare, Bath & Body</h4>
+            <ul>
+              <li><a href="/store/products/?category=beauty&subcategory=face-moisturiser">Face Moisturiser</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=cleanser">Cleanser</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=masks-peel">Masks & Peel</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=sunscreen">Sunscreen</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=serum">Serum</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=face-wash">Face Wash</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=eye-cream">Eye Cream</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=lip-balm">Lip Balm</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=body-lotion">Body Lotion</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=body-wash">Body Wash</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=body-scrub">Body Scrub</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=hand-cream">Hand Cream</a></li>
+            </ul>
+
+            <h4 class="red-heading">Baby Care</h4>
+            <h4 class="red-heading">Masks</h4>
+          </div>
+
+          <div class="mega-col">
+            <h4>Haircare</h4>
+            <ul>
+              <li><a href="/store/products/?category=beauty&subcategory=shampoo">Shampoo</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=conditioner">Conditioner</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=hair-cream">Hair Cream</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=hair-oil">Hair Oil</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=hair-gel">Hair Gel</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=hair-color">Hair Color</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=hair-serum">Hair Serum</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=hair-accessory">Hair Accessory</a></li>
+            </ul>
+
+            <h4 class="red-heading">Fragrances</h4>
+            <ul>
+              <li><a href="/store/products/?category=beauty&subcategory=perfume">Perfume</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=deodorant">Deodorant</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=body-mist">Body Mist</a></li>
+            </ul>
+          </div>
+
+          <div class="mega-col">
+            <h4>Appliances</h4>
+            <ul>
+              <li><a href="/store/products/?category=beauty&subcategory=hair-straightener">Hair Straightener</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=hair-dryer">Hair Dryer</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=epilator">Epilator</a></li>
+            </ul>
+
+            <h4 class="red-heading">Men's Grooming</h4>
+            <ul>
+              <li><a href="/store/products/?category=beauty&subcategory=trimmers">Trimmers</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=beard-oil">Beard Oil</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=hair-wax">Hair Wax</a></li>
+            </ul>
+
+            <h4 class="red-heading">Beauty Gift & Makeup Set</h4>
+            <ul>
+              <li><a href="/store/products/?category=beauty&subcategory=beauty-gift">Beauty Gift</a></li>
+              <li><a href="/store/products/?category=beauty&subcategory=makeup-kit">Makeup Kit</a></li>
+            </ul>
+
+            <h4 class="red-heading">Premium Beauty</h4>
+            <h4 class="red-heading">Wellness & Hygiene</h4>
+          </div>
+
+          <div class="mega-col">
+            <h4>Top Brands</h4>
+            <ul>
+              <li><a href="/store/products/?category=beauty&brand=lakme">Lakme</a></li>
+              <li><a href="/store/products/?category=beauty&brand=maybelline">Maybelline</a></li>
+              <li><a href="/store/products/?category=beauty&brand=loreal">Loreal</a></li>
+              <li><a href="/store/products/?category=beauty&brand=philips">Philips</a></li>
+              <li><a href="/store/products/?category=beauty&brand=bath-body">Bath & Body Works</a></li>
+              <li><a href="/store/products/?category=beauty&brand=body-shop">THE BODY SHOP</a></li>
+              <li><a href="/store/products/?category=beauty&brand=biotique">Biotique</a></li>
+              <li><a href="/store/products/?category=beauty&brand=mamaearth">Mamaearth</a></li>
+              <li><a href="/store/products/?category=beauty&brand=mcaffeine">MCaffeine</a></li>
+              <li><a href="/store/products/?category=beauty&brand=nivea">Nivea</a></li>
+              <li><a href="/store/products/?category=beauty&brand=lotus">Lotus Herbals</a></li>
+              <li><a href="/store/products/?category=beauty&brand=loreal-pro">LOreal Professionnel</a></li>
+              <li><a href="/store/products/?category=beauty&brand=kama">KAMA AYURVEDA</a></li>
+              <li><a href="/store/products/?category=beauty&brand=mac">M.A.C</a></li>
+              <li><a href="/store/products/?category=beauty&brand=forest">Forest Essentials</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="nav-right">
+    <input type="text" class="search-bar" placeholder="Search for products, brands and more">
+    <a href="/" class="nav-icon-group"><span class="material-symbols-outlined">home</span>Home</a>
+    <a href="/accounts/profile/" class="nav-icon-group"><span class="material-symbols-outlined">person</span>Profile</a>
+    <a href="/store/wishlist/" class="nav-icon-group"><span class="material-symbols-outlined">favorite</span>Wishlist</a>
+    <a href="/store/cart/" class="nav-icon-group"><span class="material-symbols-outlined">shopping_bag</span>Bag</a>
+  </div>
+</nav>
+
+<div class="overlay">
+  <div class="main-container">
+    <div class="welcome-msg">Welcome back ! <span>{{ request.user.username|default:"Guest" }}</span></div>
+
+    <div class="slider-container">
+      <div class="slides" id="slides">
+        {% for banner in banners %}
+        <div class="slide" style="background-image: url('{{ banner.image.url|default:"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070" }}')">
+          <div class="hero-content">
+            {% if banner.title %}<h2>{{ banner.title }}</h2>{% else %}<h2>The New Autumn collection.</h2>{% endif %}
+            {% if banner.button_text %}<a href="{{ banner.button_url|default:'/store/products/' }}" class="explore-btn">{{ banner.button_text }}</a>{% else %}<a href="/store/products/" class="explore-btn">EXPLORE COLLECTION</a>{% endif %}
+          </div>
+        </div>
+        {% empty %}
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070')">
+          <div class="hero-content"><h2>The New Autumn collection.</h2><a href="/store/products/" class="explore-btn">EXPLORE COLLECTION</a></div>
+        </div>
+        <div class="slide" style="background-image: url('https://img.freepik.com/premium-photo/banner-with-gold-jewelry-sale-is-displayed-gold-background_943617-40682.jpg')"><div class="hero-content"></div></div>
+        <div class="slide" style="background-image: url('https://mir-s3-cdn-cf.behance.net/project_modules/fs/d60b22179788335.6535ea2d5dc11.jpg')"><div class="hero-content"></div></div>
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=2070')">
+          <div class="hero-content"><h2>Curated Elegance.</h2><a href="/store/products/" class="explore-btn">DISCOVER</a></div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="slider-dots">
+      {% for banner in banners %}
+      <div class="dot {% if forloop.first %}active{% endif %}" onclick="currentSlide({{ forloop.counter0 }})"></div>
+      {% empty %}
+      <div class="dot active" onclick="currentSlide(0)"></div>
+      <div class="dot" onclick="currentSlide(1)"></div>
+      <div class="dot" onclick="currentSlide(2)"></div>
+      <div class="dot" onclick="currentSlide(3)"></div>
+      {% endfor %}
+    </div>
+
+    <h3 class="section-title">Featured Categories</h3>
+    <div class="category-row">
+      {% for category in featured_categories %}
+      <div class="cat-card" onclick="window.location.href='/store/products/?category={{ category.slug }}'" style="cursor: pointer;">
+        <img src="{{ category.image.url|default:'https://marketplace.canva.com/EAE_cenV7wI/1/0/1131w/canva-white-classic-photocentric-fashion-magazine-cover-jIAqY7fZGiY.jpg' }}" alt="{{ category.name }}">
+        <div class="cat-name">{{ category.name }}</div>
+      </div>
+      {% empty %}
+      <div class="cat-card" onclick="window.location.href='/store/products/?category=men'" style="cursor: pointer;">
+        <img src="https://marketplace.canva.com/EAE_cenV7wI/1/0/1131w/canva-white-classic-photocentric-fashion-magazine-cover-jIAqY7fZGiY.jpg" alt="Men">
+        <div class="cat-name">Men</div>
+      </div>
+      <div class="cat-card" onclick="window.location.href='/store/products/?category=women'" style="cursor: pointer;">
+        <img src="https://www.mswordcoverpages.com/wp-content/uploads/2020/12/Fashion-design-cover-page-3-CRC.png" alt="Women">
+        <div class="cat-name">Women</div>
+      </div>
+      <div class="cat-card" onclick="window.location.href='/store/products/?category=accessories'" style="cursor: pointer;">
+        <img src="https://i.pinimg.com/474x/81/0f/c6/810fc60a1125baea6fc5168185d6f6c6.jpg?nii=t" alt="Accessories">
+        <div class="cat-name">Accessories</div>
+      </div>
+      <div class="cat-card" onclick="window.location.href='/store/products/?category=new-arrivals'" style="cursor: pointer;">
+        <img src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/fashion-sales-new-arrivals-instagram-story-design-template-debbfc0bb9eb5c5a53786529149de17d_screen.jpg?ts=1706184019" alt="New Arrivals">
+        <div class="cat-name">New Arrivals</div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <h3 class="section-title">Medal worthy brands to bag</h3>
+    <div class="brand-slider-container">
+      <div class="brand-slides" id="brandSlides">
+        {% for brand_group in brand_groups %}
+        <div class="brand-group">
+          {% for brand in brand_group %}
+          <div class="cat-card" onclick="window.location.href='/store/products/?brand={{ brand.slug }}'" style="cursor: pointer;">
+            <img src="{{ brand.logo.url|default:'https://mir-s3-cdn-cf.behance.net/projects/404/ad50af138003223.Y3JvcCw4MDgsNjMyLDAsMA.jpg' }}" alt="{{ brand.name }}">
+            <div class="cat-name">{{ brand.name }}</div>
+          </div>
+          {% endfor %}
+        </div>
+        {% empty %}
+        <div class="brand-group">
+          <div class="cat-card" onclick="window.location.href='/store/products/?brand=levis'" style="cursor: pointer;">
+            <img src="https://mir-s3-cdn-cf.behance.net/projects/404/ad50af138003223.Y3JvcCw4MDgsNjMyLDAsMA.jpg" alt="Levi's">
+            <div class="cat-name">Levi's</div>
+          </div>
+          <div class="cat-card" onclick="window.location.href='/store/products/?brand=puma'" style="cursor: pointer;">
+            <img src="https://i.pinimg.com/736x/e0/3b/fd/e03bfd40f39a5525c4594567ae9966ad.jpg" alt="Puma">
+            <div class="cat-name">Puma</div>
+          </div>
+          <div class="cat-card" onclick="window.location.href='/store/products/?brand=hm'" style="cursor: pointer;">
+            <img src="https://mir-s3-cdn-cf.behance.net/project_modules/1400/85eed532794677.5694280b8e5fc.jpg" alt="H&M">
+            <div class="cat-name">H&M</div>
+          </div>
+          <div class="cat-card" onclick="window.location.href='/store/products/?brand=zara'" style="cursor: pointer;">
+            <img src="https://folletoss.pe/wp-content/uploads/2023/06/zara34-min.jpg" alt="Zara">
+            <div class="cat-name">Zara</div>
+          </div>
+        </div>
+
+        <div class="brand-group">
+          <div class="cat-card" onclick="window.location.href='/store/products/?brand=nike'" style="cursor: pointer;">
+            <img src="https://img.freepik.com/premium-photo/nike-brand-integration-seamlessly-blend-brand-elements-website-design_1036975-155492.jpg" alt="Nike">
+            <div class="cat-name">Nike</div>
+          </div>
+          <div class="cat-card" onclick="window.location.href='/store/products/?brand=tanishq'" style="cursor: pointer;">
+            <img src="https://staticimg.tanishq.co.in/microsite/gold-exchange/images/banner/goldex-m2-new.jpg" alt="Tanishq">
+            <div class="cat-name">Tanishq</div>
+          </div>
+          <div class="cat-card" onclick="window.location.href='/store/products/?brand=biba'" style="cursor: pointer;">
+            <img src="https://cms.landmarkshops.in/cdn-cgi/image/w=288,q=85,fit=cover/LS-Fest/LS-new/PC-2-Desktop-Women-21Apr25.jpg" alt="Biba">
+            <div class="cat-name">Biba</div>
+          </div>
+          <div class="cat-card" onclick="window.location.href='/store/products/?brand=jack-jones'" style="cursor: pointer;">
+            <img src="https://cdn.shopify.com/s/files/1/2225/5907/files/WEB_PLP_Cards_SALE_5.jpg?v=1672748223&width=533" alt="Jack & Jones">
+            <div class="cat-name">Jack & Jones</div>
+          </div>
+        </div>
+
+        <div class="brand-group">
+          <div class="cat-card" onclick="window.location.href='/store/products/?brand=uspa'" style="cursor: pointer;">
+            <img src="https://uspoloassn.in/cdn/shop/files/WOMEN_CURATION_BOX_01__1_1.jpg?v=1721925598" alt="USPA">
+            <div class="cat-name">USPA</div>
+          </div>
+          <div class="cat-card" onclick="window.location.href='/store/products/?brand=tommy'" style="cursor: pointer;">
+            <img src="https://marketplace.canva.com/EAE7HESRmfM/1/0/1131w/canva-dark-gray-modern-woman-fashion-magazine-covers-iyGKr401TZI.jpg" alt="Tommy">
+            <div class="cat-name">Tommy</div>
+          </div>
+          <div class="cat-card" onclick="window.location.href='/store/products/?brand=only'" style="cursor: pointer;">
+            <img src="https://gapinc-prod-a6bndyfubmc5d9ey.z03.azurefd.net/gapmedia/gapcorporatesite/media/images/about/gap/untitled-17.png" alt="ONLY">
+            <div class="cat-name">ONLY</div>
+          </div>
+          <div class="cat-card" onclick="window.location.href='/store/products/?brand=allen-solly'" style="cursor: pointer;">
+            <img src="https://theenterpriseworld.com/wp-content/uploads/2026/01/2.-Not-Just-Fashion-But-a-Lifestyle-Statement-in.pinterest.com_.jpg" alt="Allen Solly">
+            <div class="cat-name">Allen Solly</div>
+          </div>
+        </div>
+
+        <div class="brand-group">
+          <div class="cat-card" onclick="window.location.href='/store/products/?brand=vero-moda'" style="cursor: pointer;">
+            <img src="https://images.veromoda.com/media/s5jkcayx/row07_04_curve.jpg?v=d4502597-22e5-4fe9-a6b1-2f977643f51d&format=webp&width=512&quality=80&key=1-4-3&bg-color=F5F5F5" alt="Vero Moda">
+            <div class="cat-name">Vero Moda</div>
+          </div>
+          <div class="cat-card" onclick="window.location.href='/store/products/?brand=steve-madden'" style="cursor: pointer;">
+            <img src="https://i.pinimg.com/736x/b7/7f/5d/b77f5dbb4f5a74dbb7a99cb0a14374b0.jpg" alt="Steve madden">
+            <div class="cat-name">Steve madden</div>
+          </div>
+          <div class="cat-card" onclick="window.location.href='/store/products/?brand=skechers'" style="cursor: pointer;">
+            <img src="https://img.freepik.com/premium-vector/special-shoes-collection-social-media-facebook-cover-post-template_293893-55.jpg?w=2000" alt="Skechers">
+            <div class="cat-name">Skechers</div>
+          </div>
+          <div class="cat-card" onclick="window.location.href='/store/products/?brand=van-heusen'" style="cursor: pointer;">
+            <img src="https://www.vanheusen.com.au/media/wysiwyg/VH/2021/710x780_VH_Suits.jpg" alt="Van Heusen">
+            <div class="cat-name">Van Heusen</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="slider-dots" style="margin-top: 20px;">
+      {% for brand_group in brand_groups %}
+      <div class="brand-dot {% if forloop.first %}active{% endif %}" onclick="showBrandSlide({{ forloop.counter0 }})"></div>
+      {% empty %}
+      <div class="brand-dot active" onclick="showBrandSlide(0)"></div>
+      <div class="brand-dot" onclick="showBrandSlide(1)"></div>
+      <div class="brand-dot" onclick="showBrandSlide(2)"></div>
+      <div class="brand-dot" onclick="showBrandSlide(3)"></div>
+      {% endfor %}
+    </div>
+
+    <h3 class="section-title">Shop Our Collection</h3>
+    <div class="product-grid">
+      {% if products %}
+        {% for product in products %}
+        <div class="product-card">
+          {% if product.images.first %}
+            <img src="{{ product.images.first.image.url }}" class="product-img" alt="{{ product.name }}">
+          {% else %}
+            <img src="https://picsum.photos/seed/product1/300/220.jpg" class="product-img" alt="{{ product.name }}">
+          {% endif %}
+          <div class="p-name">{{ product.name }}</div>
+          <div class="p-price">${{ product.get_final_price }}</div>
+          <button class="add-btn" onclick="addToCart({{ product.id }})">ADD TO BAG</button>
+        </div>
+        {% endfor %}
+      {% else %}
+      <p style="text-align:center; width:100%; grid-column: span 4; color: #888;">No products found in the database.</p>
+      {% endif %}
+    </div>
+
+<script>
+  // Main Hero Slider Logic
+  let index = 0;
+  const slides = document.getElementById('slides');
+  const dots = document.querySelectorAll('.dot');
+  function showSlide(i) {
+    index = i;
+    slides.style.transform = `translateX(${-index * 25}%)`;
+    dots.forEach(d => d.classList.remove('active'));
+    dots[index].classList.add('active');
+  }
+  function currentSlide(i) { showSlide(i); }
+  
+  const bannerCount = parseInt("{{ banners|length|default:4 }}");
+  setInterval(() => { 
+    index = (index + 1) % bannerCount; 
+    showSlide(index); 
+  }, 4000);
+
+  // Brand Slider Logic
+  let brandIndex = 0;
+  const brandSlides = document.getElementById('brandSlides');
+  const brandDots = document.querySelectorAll('.brand-dot');
+  function showBrandSlide(i) {
+    brandIndex = i;
+    brandSlides.style.transform = `translateX(${-brandIndex * 25}%)`;
+
+    const bDots = document.querySelectorAll('.brand-dot');
+    brandDots.forEach(d => d.classList.remove('active'));
+    brandDots[brandIndex].classList.add('active');
+  }
+  // Optional: Auto-slide brands every 6 seconds
+  const brandGroupCount = parseInt("{{ brand_groups|length|default:4 }}");
+  setInterval(() => { 
+    brandIndex = (brandIndex + 1) % brandGroupCount; 
+    showBrandSlide(brandIndex); 
+  }, 6000);
+
+  // Add to Cart Function
+  async function addToCart(productId) {
+    try {
+      const response = await fetch('/store/add-to-cart/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: `product_id=${productId}&quantity=1`
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        alert(result.message);
+      } else {
+        alert(result.message);
+      }
+    } catch (error) {
+      alert('Failed to add to cart');
+    }
+  }
+
+  // Get CSRF Token
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+</script>
+
+</div>
+</div>
+</body>
+</html>

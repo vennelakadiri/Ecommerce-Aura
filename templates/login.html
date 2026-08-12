@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura | Login</title>
+
+<style>
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url('https://png.pngtree.com/background/20230519/original/pngtree-store-with-hanging-clothing-in-a-high-end-environment-picture-image_2654941.jpg') no-repeat center center/cover;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.card {
+  position: relative;
+  width: 400px;
+  background: #fff;
+  border-radius: 25px;
+  padding: 30px 40px;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.logo {
+  font-size: 32px;
+  font-weight: bold;
+  letter-spacing: 4px;
+  color: #b38b59;
+}
+
+.sub {
+  font-size: 10px;
+  color: #888;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.desc {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+.input-group {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.input-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #444;
+}
+
+.req-msg {
+  font-size: 10px;
+  color: #dc2626;
+  display: none;
+  font-weight: 600;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  font-size: 14px;
+  background: #fdfdfd;
+  outline: none;
+  transition: 0.3s;
+}
+
+.input-group input:focus {
+  border-color: #0a7c6f;
+}
+
+.forgot {
+  text-align: right;
+  font-size: 12px;
+  margin-bottom: 25px;
+  margin-top: -12px;
+}
+
+.forgot a {
+  color: #0a7c6f;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+button {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 35px;
+  background: #0a7c6f;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #08685d;
+  transform: translateY(-1px);
+}
+
+.signup {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555;
+}
+
+.signup a {
+  color: #0a7c6f;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+#msg {
+  margin-top: 15px;
+}
+
+/* Demo credentials section */
+.demo-credentials {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.demo-credentials h3 {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.demo-item {
+  background: #f8f9fa;
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  font-size: 11px;
+  color: #555;
+  text-align: left;
+}
+
+.demo-item strong {
+  color: #0a7c6f;
+}
+
+@media (max-width: 480px) {
+  .card {
+    width: 90%;
+    padding: 20px 25px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="overlay"></div>
+
+<div class="card">
+  <div class="logo">AURA</div>
+  <div class="sub">Boutique & Apparel</div>
+
+  <h2>Welcome Back</h2>
+  <div class="desc">Please enter your details</div>
+
+  <form id="loginForm" method="POST" action="/accounts/login/" autocomplete="off" onsubmit="event.preventDefault(); validateForm();">{% csrf_token %}
+    <div class="input-group">
+      <div class="label-row">
+        <label>Email or Phone Number</label>
+        <span id="phoneReq" class="req-msg">Filling this section is required</span>
+      </div>
+     <input type="text" id="phone" name="username" autocomplete="off" placeholder="Enter your Email or Phone n.o." 
+       oninput="if(!/[a-zA-Z@]/.test(this.value)) { this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10); }">
+    </div>
+
+    <div class="input-group">
+      <div class="label-row">
+        <label>Password</label>
+        <span id="passReq" class="req-msg">Filling this section is required</span>
+      </div>
+      <input type="password" id="password" name="password" autocomplete="new-password" placeholder="Enter your Password">
+    </div>
+
+    <div class="forgot">
+      <a href="/accounts/forgot-password/">Forgot Password?</a>
+    </div>
+
+    <button type="submit">SIGN IN</button>
+  </form>
+
+  <div class="signup">
+    Don't have an account? <a href="/accounts/signup/">Sign up</a>
+  </div>
+
+  <div id="msg"></div>
+
+  <div class="demo-credentials">
+    <h3>Demo Credentials</h3>
+    <div class="demo-item">
+      <strong>Customer:</strong> customer@aura.com / customer123
+    </div>
+    <div class="demo-item">
+      <strong>Admin:</strong> admin@aura.com / admin123
+    </div>
+    <div class="demo-item">
+      <strong>Delivery Boy:</strong> delivery@aura.com / delivery123
+    </div>
+  </div>
+</div>
+
+<script>
+async function validateForm() {
+  const phoneField = document.getElementById("phone");
+  const passField = document.getElementById("password");
+  const phoneReq = document.getElementById("phoneReq");
+  const passReq = document.getElementById("passReq");
+  const msg = document.getElementById("msg");
+
+  phoneReq.style.display = "none";
+  passReq.style.display = "none";
+  msg.innerHTML = "";
+  
+  let valid = true;
+
+  if (!phoneField.value.trim()) {
+    phoneReq.style.display = "inline";
+    valid = false;
+  }
+  if (!passField.value.trim()) {
+    passReq.style.display = "inline";
+    valid = false;
+  }
+
+  if (!valid) return;
+
+  const val = phoneField.value.trim();
+  const isEmail = val.includes("@") && val.includes(".");
+  
+  if (!isEmail && val.length !== 10) {
+    msg.innerHTML = "<div style='color:#dc2626; font-size:13px;'>Phone number must be 10 digits</div>";
+    return;
+  }
+
+  login(val, passField.value.trim());
+}
+
+async function login(username, password) {
+  const msg = document.getElementById("msg");
+  try {
+    const response = await fetch('/accounts/login/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ "username": username, "password": password })
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      localStorage.setItem('access_token', result.access);
+      msg.innerHTML = "<div style='color:#059669; font-size:13px;'>Login Successful! Redirecting...</div>";
+      setTimeout(() => { 
+        if (result.redirect_url) {
+          window.location.href = result.redirect_url;
+        } else {
+          window.location.href = "/home/";
+        }
+      }, 1000);
+    } else {
+      msg.innerHTML = `<div style='color:#dc2626; font-size:13px;'>${result.detail || "Invalid credentials only demo credientals are allowed"}</div>`;
+    }
+  } catch (error) {
+    msg.innerHTML = "<div style='color:#dc2626; font-size:13px;'>Connection failed.</div>";
+  }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const phone = document.getElementById('phone');
+  const password = document.getElementById('password');
+  if (phone) phone.value = '';
+  if (password) password.value = '';
+});
+</script>
+
+</body>
+</html>

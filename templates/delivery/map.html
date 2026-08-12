@@ -1,0 +1,462 @@
+{% load delivery_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura | Delivery Map</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+body { 
+  background: url('https://png.pngtree.com/background/20230519/original/pngtree-store-with-hanging-clothing-in-a-high-end-environment-picture-image_2654941.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+.overlay {
+  background: rgba(0, 0, 0, 0.7);
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+/* --- NAVBAR --- */
+.navbar {
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 5%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-left { display: flex; align-items: center; gap: 30px; }
+.nav-logo { font-size: 28px; font-weight: bold; letter-spacing: 4px; color: #b38b59; text-decoration: none; }
+.nav-right { display: flex; align-items: center; gap: 20px; }
+
+.user-info { display: flex; align-items: center; gap: 10px; color: #333; font-size: 14px; font-weight: 600; }
+.logout-btn { padding: 8px 20px; background: #0a7c6f; color: white; text-decoration: none; border-radius: 20px; font-size: 12px; font-weight: 600; transition: 0.3s; }
+.logout-btn:hover { background: #08685d; }
+
+/* --- MAIN CONTAINER --- */
+.main-container {
+  width: 95%;
+  max-width: 1300px;
+  margin: 30px auto;
+  background: #fdfaf5;
+  border-radius: 40px;
+  padding: 40px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.page-title { 
+  font-size: 32px; 
+  font-weight: 700; 
+  color: #222; 
+  margin: 0;
+}
+
+.page-title span { color: #b38b59; }
+
+.back-btn {
+  padding: 10px 20px;
+  background: #b38b59;
+  color: white;
+  text-decoration: none;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.back-btn:hover {
+  background: #9a7a48;
+}
+
+/* --- ORDER INFO --- */
+.order-info {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.order-number {
+  font-size: 24px;
+  font-weight: 700;
+  color: #222;
+}
+
+.order-status {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-pending { background: #fef3c7; color: #92400e; }
+.status-confirmed { background: #dbeafe; color: #1e40af; }
+.status-processing { background: #e9d5ff; color: #6b21a8; }
+.status-shipped { background: #fed7aa; color: #9a3412; }
+.status-delivered { background: #d1fae5; color: #065f46; }
+
+.order-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.detail-label {
+  font-size: 12px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.detail-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.price-highlight {
+  font-size: 20px;
+  color: #b38b59;
+  font-weight: 700;
+}
+
+/* --- MAP CONTAINER --- */
+.map-section {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.map-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #222;
+}
+
+.map-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.action-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.navigate-btn {
+  background: #0a7c6f;
+  color: white;
+}
+
+.navigate-btn:hover {
+  background: #08685d;
+}
+
+.directions-btn {
+  background: #b38b59;
+  color: white;
+}
+
+.directions-btn:hover {
+  background: #9a7a48;
+}
+
+#map {
+  height: 500px;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+/* --- DELIVERY INFO --- */
+.delivery-info {
+  margin-top: 20px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 15px;
+  border-left: 4px solid #0a7c6f;
+}
+
+.delivery-address {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.delivery-instructions {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* --- LOADING --- */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.loading-spinner {
+  font-size: 48px;
+  color: #b38b59;
+  margin-bottom: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .main-container { width: 95%; padding: 20px; }
+  .page-title { font-size: 24px; }
+  .page-header { flex-direction: column; gap: 20px; align-items: flex-start; }
+  .order-details { grid-template-columns: 1fr; }
+  #map { height: 300px; }
+  .map-actions { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<div class="overlay">
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="/delivery/home/" class="nav-logo">AURA</a>
+      <div class="user-info">
+        <span class="material-symbols-outlined">map</span>
+        Delivery Map
+      </div>
+    </div>
+    <div class="nav-right">
+      <span style="color: #333; font-size: 14px;">Welcome, {{ request.user.username|default:"Delivery Boy" }}</span>
+      <a href="/accounts/logout/" class="logout-btn">Logout</a>
+    </div>
+  </nav>
+
+  <div class="main-container">
+    <div class="page-header">
+      <h1 class="page-title">Delivery <span>Map</span></h1>
+      <a href="/delivery/orders/" class="back-btn">
+        <span class="material-symbols-outlined">arrow_back</span>
+        Back to Orders
+      </a>
+    </div>
+
+    <div class="order-info">
+      <div class="order-header">
+        <div class="order-number">Order #{{ order.order_number }}</div>
+        <div class="order-status status-{{ order.status|slugify }}">{{ order.status|title }}</div>
+      </div>
+      
+      <div class="order-details">
+        <div class="detail-item">
+          <div class="detail-label">Customer</div>
+          <div class="detail-value">{{ order.customer_name }}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Phone</div>
+          <div class="detail-value">{{ order.customer_phone }}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Order Amount</div>
+          <div class="detail-value price-highlight">${{ order.total_amount }}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Delivery Fee</div>
+          <div class="detail-value">${{ order.delivery_fee|default:5.00 }}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Total Earning</div>
+          <div class="detail-value price-highlight">${{ order.total_amount|commission|floatformat:2 }}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Order Date</div>
+          <div class="detail-value">{{ order.created_at|date:"M d, Y H:i" }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="map-section">
+      <div class="map-header">
+        <h2 class="map-title">Delivery Location</h2>
+        <div class="map-actions">
+          <button class="action-btn navigate-btn" onclick="startNavigation()">
+            <span class="material-symbols-outlined">navigation</span>
+            Start Navigation
+          </button>
+          <button class="action-btn directions-btn" onclick="getDirections()">
+            <span class="material-symbols-outlined">directions</span>
+            Get Directions
+          </button>
+        </div>
+      </div>
+      
+      <div id="map">
+        <div class="loading">
+          <div class="loading-spinner">
+            <span class="material-symbols-outlined">hourglass_empty</span>
+          </div>
+          <p>Loading map...</p>
+        </div>
+      </div>
+      
+      <div class="delivery-info">
+        <div class="delivery-address">
+          <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 8px;">location_on</span>
+          {{ delivery_address }}
+        </div>
+        <div class="delivery-instructions">
+          {% if order.delivery_instructions %}
+            <strong>Delivery Instructions:</strong> {{ order.delivery_instructions }}
+          {% else %}
+            <strong>Delivery Instructions:</strong> No special instructions provided. Contact customer if needed.
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Initialize map
+let map;
+let deliveryMarker;
+
+function initMap() {
+  // Default coordinates (can be replaced with actual geocoding)
+  const defaultLat = 28.6139; // Delhi
+  const defaultLng = 77.2090;
+  
+  // Initialize map
+  map = L.map('map').setView([defaultLat, defaultLng], 13);
+  
+  // Add tile layer
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+  
+  // Try to geocode the delivery address
+  geocodeAddress("{{ delivery_address|escapejs }}");
+}
+
+function geocodeAddress(address) {
+  // Using Nominatim API for geocoding
+  fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data && data.length > 0) {
+        const lat = parseFloat(data[0].lat);
+        const lng = parseFloat(data[0].lon);
+        
+        // Center map on the location
+        map.setView([lat, lng], 15);
+        
+        // Add marker for delivery location
+        if (deliveryMarker) {
+          map.removeLayer(deliveryMarker);
+        }
+        
+        deliveryMarker = L.marker([lat, lng]).addTo(map);
+        deliveryMarker.bindPopup(`
+          <strong>Delivery Location</strong><br>
+          {{ delivery_address|escapejs }}<br>
+          <strong>Order:</strong> #{{ order.order_number }}<br>
+          <strong>Amount:</strong> ${{ order.total_amount }}
+        `).openPopup();
+        
+        // Add circle to show approximate area
+        L.circle([lat, lng], {
+          color: '#0a7c6f',
+          fillColor: '#0a7c6f',
+          fillOpacity: 0.2,
+          radius: 200
+        }).addTo(map);
+      } else {
+        // Fallback to default location with error message
+        showError("Could not find exact location. Showing approximate area.");
+      }
+    })
+    .catch(error => {
+      console.error('Geocoding error:', error);
+      showError("Error loading map. Please try again.");
+    });
+}
+
+function startNavigation() {
+  const address = "{{ delivery_address|escapejs }}";
+  // Open in Google Maps for navigation
+  window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`, '_blank');
+}
+
+function getDirections() {
+  const address = "{{ delivery_address|escapejs }}";
+  // Open in Google Maps for directions
+  window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`, '_blank');
+}
+
+function showError(message) {
+  const mapDiv = document.getElementById('map');
+  mapDiv.innerHTML = `
+    <div class="loading">
+      <div class="loading-spinner">
+        <span class="material-symbols-outlined">error</span>
+      </div>
+      <p>${message}</p>
+    </div>
+  `;
+}
+
+// Initialize map when page loads
+document.addEventListener('DOMContentLoaded', initMap);
+</script>
+
+</body>
+</html>

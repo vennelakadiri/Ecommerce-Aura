@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura | Checkout</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+  
+  body { 
+    background: url('https://png.pngtree.com/background/20230519/original/pngtree-store-with-hanging-clothing-in-a-high-end-environment-picture-image_2654941.jpg') no-repeat center center fixed;
+    background-size: cover;
+  }
+
+  .overlay {
+    background: rgba(0, 0, 0, 0.7);
+    min-height: 100vh;
+    padding-bottom: 40px;
+  }
+
+  /* --- NAVBAR --- */
+  .navbar {
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 5%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .nav-left { display: flex; align-items: center; gap: 50px; }
+  .nav-logo { font-size: 28px; font-weight: bold; letter-spacing: 4px; color: #b38b59; text-decoration: none; }
+  .nav-links { display: flex; gap: 35px; list-style: none; align-items: center; }
+  .nav-links a { text-decoration: none; color: #333; font-size: 13px; font-weight: 700; text-transform: uppercase; transition: 0.3s; }
+  .nav-links a:hover { color: #b38b59; }
+  .nav-right { display: flex; align-items: center; gap: 25px; }
+
+  .search-bar {
+    background: #fdfaf5;
+    border: 1px solid #eee;
+    padding: 10px 15px;
+    border-radius: 4px;
+    width: 300px;
+    font-size: 13px;
+    outline: none;
+  }
+
+  .search-btn {
+    background: #b38b59;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 5px;
+  }
+
+  .search-btn span {
+    color: white;
+    font-size: 18px;
+  }
+
+  .nav-icon-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #333;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .nav-icon-group span { font-size: 22px; margin-bottom: 2px; }
+  .nav-icon-group:hover { color: #b38b59; }
+
+  /* --- MAIN CONTAINER --- */
+  .main-container {
+    width: 95%;
+    max-width: 1300px;
+    margin: 30px auto;
+    background: #fdfaf5;
+    border-radius: 40px;
+    padding: 40px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  }
+
+  .page-title { 
+    text-align: center; 
+    font-size: 32px; 
+    font-weight: 700; 
+    color: #222; 
+    margin-bottom: 40px;
+    letter-spacing: -1px;
+  }
+
+  .page-title span { color: #b38b59; }
+
+  /* --- CHECKOUT LAYOUT --- */
+  .checkout-container {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 40px;
+  }
+
+  /* --- SHIPPING FORM --- */
+  .shipping-form {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  }
+
+  .form-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: 0.3s;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: #b38b59;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  /* --- ORDER SUMMARY --- */
+  .order-summary {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+  }
+
+  .summary-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 14px;
+  }
+
+  .summary-row.total {
+    font-size: 18px;
+    font-weight: 700;
+    color: #222;
+    padding-top: 15px;
+    border-top: 2px solid #f0f0f0;
+    margin-top: 15px;
+  }
+
+  .cart-items {
+    margin-bottom: 25px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .cart-item {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f5f5f5;
+  }
+
+  .cart-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .item-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .item-details {
+    flex: 1;
+  }
+
+  .item-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+  }
+
+  .item-price {
+    font-size: 14px;
+    color: #666;
+  }
+
+  .item-quantity {
+    font-size: 12px;
+    color: #999;
+  }
+
+  /* --- BUTTONS --- */
+  .btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+  }
+
+  .btn-primary {
+    background: #b38b59;
+    color: white;
+    width: 100%;
+  }
+
+  .btn-primary:hover {
+    background: #9a7a48;
+  }
+
+  .btn-secondary {
+    background: #f8f9fa;
+    color: #333;
+    border: 1px solid #dee2e6;
+  }
+
+  .btn-secondary:hover {
+    background: #e9ecef;
+  }
+
+  /* --- PAYMENT METHODS --- */
+  .payment-methods {
+    margin-bottom: 25px;
+  }
+
+  .payment-option {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .payment-option:hover {
+    border-color: #b38b59;
+  }
+
+  .payment-option input[type="radio"] {
+    margin-right: 15px;
+  }
+
+  .payment-option label {
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .checkout-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+    
+    .order-summary {
+      position: static;
+    }
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-left">
+    <a href="/home/" class="nav-logo"><span class="material-symbols-outlined" style="font-size: 28px; color: #b38b59; margin-right: 10px;">home</span>AURA</a>
+    <ul class="nav-links">
+      <li><a href="/store/products/?category=men">Men</a></li>
+      <li><a href="/store/products/?category=women">Women</a></li>
+      <li><a href="/store/products/?category=accessories">Accessories</a></li>
+      <li><a href="/store/products/?category=new-arrivals">New Arrivals</a></li>
+    </ul>
+  </div>
+  <div class="nav-right">
+    <form method="GET" action="/store/products/" style="display: flex; align-items: center; margin: 0; padding: 0; position: relative; z-index: 9999;" onsubmit="const v = this.elements['search'].value.trim(); if(!v){event.preventDefault(); return false;} this.elements['search'].value = v; return true;">
+      <input type="text" class="search-bar" name="search" autocomplete="off" placeholder="Search for products, brands and more">
+      <button type="submit" class="search-btn">
+        <span class="material-symbols-outlined">search</span>
+      </button>
+    </form>
+    <a href="/home/" class="nav-icon-group"><span class="material-symbols-outlined">home</span>Home</a>
+    <a href="/accounts/profile/" class="nav-icon-group"><span class="material-symbols-outlined">person</span>Profile</a>
+    <a href="/store/wishlist/" class="nav-icon-group"><span class="material-symbols-outlined">favorite</span>Wishlist</a>
+    <a href="/store/cart/" class="nav-icon-group"><span class="material-symbols-outlined">shopping_bag</span>Bag</a>
+  </div>
+</nav>
+
+<div class="overlay">
+  <div class="main-container">
+    <h1 class="page-title">Checkout</h1>
+    
+    <div class="checkout-container">
+      <!-- Shipping Information Form -->
+      <div class="shipping-form">
+        <h2 class="form-title">Shipping Information</h2>
+        
+        <form method="post" action="{% url 'place_order' %}">
+          {% csrf_token %}
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="first_name">First Name *</label>
+              <input type="text" id="first_name" name="first_name" required>
+            </div>
+            <div class="form-group">
+              <label for="last_name">Last Name *</label>
+              <input type="text" id="last_name" name="last_name" required>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" name="email" value="{{ request.user.email }}" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="phone">Phone Number *</label>
+            <input type="tel" id="phone" name="phone" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="address">Street Address *</label>
+            <input type="text" id="address" name="address" required>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="city">City *</label>
+              <input type="text" id="city" name="city" required>
+            </div>
+            <div class="form-group">
+              <label for="state">State *</label>
+              <input type="text" id="state" name="state" required>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="postal_code">Postal Code *</label>
+              <input type="text" id="postal_code" name="postal_code" required>
+            </div>
+            <div class="form-group">
+              <label for="country">Country *</label>
+              <input type="text" id="country" name="country" value="India" required>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="notes">Order Notes (Optional)</label>
+            <textarea id="notes" name="notes" rows="3" placeholder="Special instructions for delivery..."></textarea>
+          </div>
+        </form>
+      </div>
+      
+      <!-- Order Summary -->
+      <div class="order-summary">
+        <h2 class="summary-title">Order Summary</h2>
+        
+        <!-- Cart Items -->
+        <div class="cart-items">
+          {% for item in cart_items %}
+          <div class="cart-item">
+            {% if item.product.images.exists %}
+            <img src="{{ item.product.images.first.image }}" class="item-image" alt="{{ item.product.name }}">
+            {% else %}
+            <img src="https://picsum.photos/seed/{{ item.product.name|slugify }}/60/60.jpg" class="item-image" alt="{{ item.product.name }}">
+            {% endif %}
+            <div class="item-details">
+              <div class="item-name">{{ item.product.name }}</div>
+              <div class="item-price">${{ item.product.get_final_price }}</div>
+              <div class="item-quantity">Qty: {{ item.quantity }}</div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        
+        <!-- Price Breakdown -->
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span>${{ subtotal }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span>${{ shipping_charge }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Tax (18%)</span>
+          <span>${{ tax_amount }}</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total</span>
+          <span>${{ total_amount }}</span>
+        </div>
+        
+        <!-- Payment Methods -->
+        <div class="payment-methods">
+          <h3 style="font-size: 16px; margin-bottom: 15px;">Payment Method</h3>
+          <div class="payment-option">
+            <input type="radio" id="cod" name="payment_method" value="cod" checked>
+            <label for="cod">Cash on Delivery</label>
+          </div>
+          <div class="payment-option">
+            <input type="radio" id="card" name="payment_method" value="card">
+            <label for="card">Credit/Debit Card</label>
+          </div>
+          <div class="payment-option">
+            <input type="radio" id="upi" name="payment_method" value="upi">
+            <label for="upi">UPI</label>
+          </div>
+        </div>
+        
+        <!-- Place Order Button -->
+        <div style="margin-bottom: 15px; text-align: center; color: #dc3545; font-size: 14px; font-weight: 600; background: #fff3cd; padding: 10px; border-radius: 8px; border: 1px solid #ffc107;">
+          Placing order is disabled for demo
+        </div>
+        <button type="submit" form="shipping-form" class="btn btn-primary" disabled>Place Order</button>
+        
+        <div style="margin-top: 20px; text-align: center;">
+          <a href="/store/cart/" class="btn btn-secondary">Back to Cart</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

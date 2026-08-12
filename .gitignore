@@ -1,0 +1,29 @@
+# Virtual environment
+venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Django database
+db.sqlite3
+db.sqlite3.backup
+
+# Environment variables
+.env
+.env.*
+
+# IDE/editor files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Image/cache files
+pexels_cache.json
+wikimedia_cache.json
+
+# Temporary images
+temp_image_*.jpg

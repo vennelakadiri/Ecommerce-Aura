@@ -1,0 +1,275 @@
+{% load delivery_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura | Delivery Orders</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+body { 
+  background: url('https://png.pngtree.com/background/20230519/original/pngtree-store-with-hanging-clothing-in-a-high-end-environment-picture-image_2654941.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+.overlay {
+  background: rgba(0, 0, 0, 0.7);
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+/* --- NAVBAR --- */
+.navbar {
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 5%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-left { display: flex; align-items: center; gap: 30px; }
+.nav-logo { font-size: 28px; font-weight: bold; letter-spacing: 4px; color: #b38b59; text-decoration: none; }
+.nav-right { display: flex; align-items: center; gap: 20px; }
+
+.user-info { display: flex; align-items: center; gap: 10px; color: #333; font-size: 14px; font-weight: 600; }
+.logout-btn { padding: 8px 20px; background: #0a7c6f; color: white; text-decoration: none; border-radius: 20px; font-size: 12px; font-weight: 600; transition: 0.3s; }
+.logout-btn:hover { background: #08685d; }
+
+/* --- MAIN CONTAINER --- */
+.main-container {
+  width: 95%;
+  max-width: 1300px;
+  margin: 30px auto;
+  background: #fdfaf5;
+  border-radius: 40px;
+  padding: 40px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+
+.page-title { 
+  text-align: center; 
+  font-size: 32px; 
+  font-weight: 700; 
+  color: #222; 
+  margin-bottom: 30px;
+  letter-spacing: -1px;
+}
+
+.page-title span { color: #b38b59; }
+
+/* --- FILTER BAR --- */
+.filter-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.filter-btn:hover { border-color: #b38b59; }
+.filter-btn.active { background: #b38b59; color: white; border-color: #b38b59; }
+
+/* --- ORDERS GRID --- */
+.orders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.order-card {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  transition: 0.3s;
+}
+
+.order-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.order-number {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.order-status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-pending { background: #fff3cd; color: #856404; }
+.status-processing { background: #cce5ff; color: #004085; }
+.status-shipped { background: #d4edda; color: #155724; }
+.status-out_for_delivery { background: #f8d7da; color: #721c24; }
+.status-delivered { background: #d1ecf1; color: #0c5460; }
+
+.order-details {
+  margin-bottom: 15px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.detail-label { color: #666; }
+.detail-value { font-weight: 600; color: #333; }
+.earning-amount { color: #0a7c6f; font-weight: 700; }
+
+.order-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  text-align: center;
+  text-decoration: none;
+}
+
+.view-btn { background: #0a7c6f; color: white; }
+.map-btn { background: #b38b59; color: white; }
+
+.action-btn:hover { opacity: 0.9; }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .main-container { width: 95%; padding: 20px; }
+  .page-title { font-size: 24px; }
+  .orders-grid { grid-template-columns: 1fr; }
+  .filter-bar { flex-direction: column; gap: 15px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-left">
+    <a href="/delivery/home/" class="nav-logo">AURA</a>
+    <div class="user-info">
+      <span class="material-symbols-outlined">list_alt</span>
+      Orders List
+    </div>
+  </div>
+  <div class="nav-right">
+    <span style="color: #333; font-size: 14px;">Welcome, {{ request.user.username|default:"Delivery Boy" }}</span>
+    <a href="/accounts/logout/" class="logout-btn">Logout</a>
+  </div>
+</nav>
+
+<div class="overlay">
+  <div class="main-container">
+    <h1 class="page-title">Delivery <span>Orders</span></h1>
+    
+    <div class="filter-bar">
+      <div class="filter-buttons">
+        <a href="/delivery/orders/?status=all" class="filter-btn {% if status_filter == 'all' %}active{% endif %}">All</a>
+        <a href="/delivery/orders/?status=pending" class="filter-btn {% if status_filter == 'pending' %}active{% endif %}">Pending</a>
+        <a href="/delivery/orders/?status=processing" class="filter-btn {% if status_filter == 'processing' %}active{% endif %}">Processing</a>
+        <a href="/delivery/orders/?status=shipped" class="filter-btn {% if status_filter == 'shipped' %}active{% endif %}">Shipped</a>
+        <a href="/delivery/orders/?status=out_for_delivery" class="filter-btn {% if status_filter == 'out_for_delivery' %}active{% endif %}">Out for Delivery</a>
+        <a href="/delivery/orders/?status=delivered" class="filter-btn {% if status_filter == 'delivered' %}active{% endif %}">Delivered</a>
+      </div>
+    </div>
+
+    <div class="orders-grid">
+      {% for order in orders %}
+      <div class="order-card">
+        <div class="order-header">
+          <div class="order-number">#{{ order.order_number }}</div>
+          <div class="order-status status-{{ order.status|slugify }}">{{ order.status|title }}</div>
+        </div>
+        
+        <div class="order-details">
+          <div class="detail-row">
+            <span class="detail-label">Customer:</span>
+            <span class="detail-value">{{ order.customer_name }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Order Amount:</span>
+            <span class="detail-value">${{ order.total_amount }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Delivery Fee:</span>
+            <span class="detail-value">${{ order.delivery_fee|default:5.00 }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Your Earning:</span>
+            <span class="detail-value earning-amount">${{ order.total_amount|commission|floatformat:2 }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Order Date:</span>
+            <span class="detail-value">{{ order.created_at|date:"M d, Y" }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Delivery Address:</span>
+            <span class="detail-value">{{ order.shipping_address }}, {{ order.shipping_city }}, {{ order.shipping_state }} - {{ order.shipping_pincode }}</span>
+          </div>
+        </div>
+        
+        <div class="order-actions">
+          <a href="/delivery/order/{{ order.order_number }}/" class="action-btn view-btn">View Details</a>
+          <a href="/delivery/map/{{ order.order_number }}/" class="action-btn map-btn">
+            <span class="material-symbols-outlined" style="font-size: 14px; vertical-align: middle;">map</span>
+            View Map
+          </a>
+        </div>
+      </div>
+      {% empty %}
+      <div style="grid-column: span 1; text-align: center; padding: 60px 20px; color: #666;">
+        <span class="material-symbols-outlined" style="font-size: 48px; margin-bottom: 20px;">inventory_2</span>
+        <h3>No orders found</h3>
+        <p>Orders assigned to you will appear here</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+</body>
+</html>

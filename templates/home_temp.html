@@ -1,0 +1,18 @@
+<div class="product-grid">
+      {% if products %}
+        {% for product in products %}
+        <div class="product-card">
+          {% if product.images.first %}
+            <img src="{{ product.images.first.image.url }}" class="product-img" alt="{{ product.name }}">
+          {% else %}
+            <img src="https://picsum.photos/seed/product1/300/220.jpg" class="product-img" alt="{{ product.name }}">
+          {% endif %}
+          <div class="p-name">{{ product.name }}</div>
+          <div class="p-price">${{ product.get_final_price }}</div>
+          <button class="add-btn" onclick="addToCart({{ product.id }})">ADD TO BAG</button>
+        </div>
+        {% endfor %}
+      {% else %}
+      <p style="text-align:center; width:100%; grid-column: span 4; color: #888;">No products found in the database.</p>
+      {% endif %}
+    </div>
