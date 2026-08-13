@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: ecommerce-aura
+    runtime: python
+    plan: free
+    buildCommand: bash build.sh
+    startCommand: bash start.sh
+    envVars:
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ecommerce-aura-db
+          property: connectionString
+
+databases:
+  - name: ecommerce-aura-db
+    plan: free
