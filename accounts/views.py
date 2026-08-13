@@ -7,7 +7,7 @@ from django.views.decorators.http import require_http_methods
 from django.db.models import Q
 import json
 
-from .models import User, CustomerProfile
+from .models import User, CustomerProfile, AdminProfile, DeliveryBoyProfile
 
 ALLOWED_DEMO_CREDENTIALS = {
     'customer@aura.com': 'customer123',
@@ -17,6 +17,36 @@ ALLOWED_DEMO_CREDENTIALS = {
     'delivery@aura.com': 'delivery123',
     'delivery': 'delivery123',
 }
+
+
+def _get_user_profile(user):
+    if user.role == 'customer':
+        profile, _ = CustomerProfile.objects.get_or_create(
+            user=user,
+            defaults={
+                'loyalty_points': 0,
+                'default_payment_method': 'credit_card',
+            },
+        )
+        return profile
+    if user.role == 'delivery_boy':
+        profile, _ = DeliveryBoyProfile.objects.get_or_create(
+            user=user,
+            defaults={
+                'vehicle_type': 'bike',
+                'vehicle_number': 'N/A',
+                'license_number': 'N/A',
+            },
+        )
+        return profile
+    if user.role == 'admin':
+        profile, _ = AdminProfile.objects.get_or_create(
+            user=user,
+            defaults={'department': 'Management'},
+        )
+        return profile
+    return None
+
 
 @csrf_exempt
 def login_view(request):
@@ -31,10 +61,15 @@ def login_view(request):
             if username in ALLOWED_DEMO_CREDENTIALS and ALLOWED_DEMO_CREDENTIALS[username] == password:
                 user = authenticate(request, username=username, password=password)
                 if user is not None:
-                    if user.role == 'admin' and (not user.is_staff or not user.is_superuser):
-                        user.is_staff = True
-                        user.is_superuser = True
-                        user.save(update_fields=['is_staff', 'is_superuser'])
+                    if user.role == 'admin':
+                        if not user.is_staff or not user.is_superuser:
+                            user.is_staff = True
+                            user.is_superuser = True
+                            user.save(update_fields=['is_staff', 'is_superuser'])
+                        AdminProfile.objects.get_or_create(
+                            user=user,
+                            defaults={'department': 'Management'},
+                        )
 
                     login(request, user)
                     
@@ -143,14 +178,11 @@ def profile_view(request):
     context = {
         'user': request.user,
     }
-    
-    if request.user.role == 'customer':
-        context['profile'] = request.user.customer_profile
-    elif request.user.role == 'delivery_boy':
-        context['profile'] = request.user.delivery_profile
-    elif request.user.role == 'admin':
-        context['profile'] = request.user.admin_profile
-    
+
+    profile = _get_user_profile(request.user)
+    if profile is not None:
+        context['profile'] = profile
+
     return render(request, 'profile.html', context)
 
 def subscription_management(request):
