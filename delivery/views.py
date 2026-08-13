@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.contrib import messages
@@ -13,9 +13,14 @@ def delivery_home_view(request):
         return redirect('login')
     
     try:
-        delivery_profile = request.user.delivery_profile
-        
-        # Get today's orders
+        delivery_profile, _ = DeliveryBoyProfile.objects.get_or_create(
+            user=request.user,
+            defaults={
+                'vehicle_type': 'bike',
+                'vehicle_number': 'N/A',
+                'license_number': 'N/A',
+            }
+        )
         today = datetime.now().date()
         today_orders = Order.objects.filter(
             delivery_boy=request.user,
@@ -113,7 +118,14 @@ def update_order_status(request, order_number):
                 if new_status == 'delivered':
                     order.actual_delivery = datetime.now().date()
                     # Update delivery boy stats
-                    delivery_profile = request.user.delivery_profile
+                    delivery_profile, _ = DeliveryBoyProfile.objects.get_or_create(
+                        user=request.user,
+                        defaults={
+                            'vehicle_type': 'bike',
+                            'vehicle_number': 'N/A',
+                            'license_number': 'N/A',
+                        }
+                    )
                     delivery_profile.total_deliveries += 1
                     delivery_profile.earnings += order.total_amount * 0.05  # 5% commission
                     delivery_profile.save()
@@ -143,7 +155,14 @@ def earnings_view(request):
         return redirect('login')
     
     try:
-        delivery_profile = request.user.delivery_profile
+        delivery_profile, _ = DeliveryBoyProfile.objects.get_or_create(
+            user=request.user,
+            defaults={
+                'vehicle_type': 'bike',
+                'vehicle_number': 'N/A',
+                'license_number': 'N/A',
+            }
+        )
         
         # Get earnings data
         total_earnings = delivery_profile.earnings
@@ -196,7 +215,14 @@ def delivery_profile_view(request):
         return redirect('login')
     
     try:
-        delivery_profile = request.user.delivery_profile
+        delivery_profile, _ = DeliveryBoyProfile.objects.get_or_create(
+            user=request.user,
+            defaults={
+                'vehicle_type': 'bike',
+                'vehicle_number': 'N/A',
+                'license_number': 'N/A',
+            }
+        )
         
         # Get delivery statistics
         total_deliveries = delivery_profile.total_deliveries
