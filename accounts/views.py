@@ -31,6 +31,11 @@ def login_view(request):
             if username in ALLOWED_DEMO_CREDENTIALS and ALLOWED_DEMO_CREDENTIALS[username] == password:
                 user = authenticate(request, username=username, password=password)
                 if user is not None:
+                    if user.role == 'admin' and (not user.is_staff or not user.is_superuser):
+                        user.is_staff = True
+                        user.is_superuser = True
+                        user.save(update_fields=['is_staff', 'is_superuser'])
+
                     login(request, user)
                     
                     # Redirect based on user role
