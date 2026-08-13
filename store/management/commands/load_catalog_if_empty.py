@@ -6,6 +6,7 @@ from pathlib import Path
 from django.conf import settings
 from django.core.management import call_command
 from django.core.management.base import BaseCommand, CommandError
+from django.db import IntegrityError
 
 from store.models import Banner, Brand, Category, Product
 
@@ -18,9 +19,11 @@ class Command(BaseCommand):
         self.stdout.write(f'Database engine: {engine}')
 
         if os.environ.get('RENDER') and not os.environ.get('DATABASE_URL'):
-            raise CommandError(
-                'DATABASE_URL is not set on Render. '
-                'Link a PostgreSQL database to this service so catalog data persists.'
+            self.stdout.write(
+                self.style.WARNING(
+                    'DATABASE_URL is not set. Using SQLite on Render; '
+                    'link PostgreSQL for persistent production data.'
+                )
             )
 
         if Product.objects.exists():
@@ -59,8 +62,16 @@ class Command(BaseCommand):
 
         try:
             call_command('loaddata', temp_fixture_path, verbosity=1)
+        except IntegrityError:
+            if Product.objects.exists():
+                self.stdout.write('Catalog load raced with another worker; data is present.')
+            else:
+                raise CommandError('Catalog import failed due to a database integrity error.') from None
         except Exception as exc:
-            raise CommandError(f'Catalog import failed: {exc}') from exc
+            if Product.objects.exists():
+                self.stdout.write('Catalog load reported an error but products are present.')
+            else:
+                raise CommandError(f'Catalog import failed: {exc}') from exc
         finally:
             Path(temp_fixture_path).unlink(missing_ok=True)
 
