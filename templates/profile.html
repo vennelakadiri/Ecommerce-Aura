@@ -77,6 +77,9 @@
   .nav-icon-group span { font-size: 22px; margin-bottom: 2px; }
   .nav-icon-group:hover { color: #b38b59; }
 
+  /* Admin navbar extras */
+  .navbar .user-info { display: flex; align-items: center; gap: 10px; color: #333; font-size: 14px; font-weight: 600; }
+
   /* --- MAIN CONTAINER --- */
   .main-container {
     width: 95%;
@@ -276,6 +279,22 @@
 </head>
 <body>
 
+{% if user.role == 'admin' %}
+<nav class="navbar">
+  <div class="nav-left">
+    <a href="/accounts/dashboard/" class="nav-logo">AURA</a>
+    <div class="user-info" style="display: flex; align-items: center; gap: 10px; color: #333; font-size: 14px; font-weight: 600;">
+      <span class="material-symbols-outlined">admin_panel_settings</span>
+      My Profile
+    </div>
+  </div>
+  <div class="nav-right">
+    <span style="color: #333; font-size: 14px; font-weight: 600;">Welcome, {{ user.username|title }}</span>
+    <a href="/accounts/dashboard/" style="padding: 8px 20px; background: #b38b59; color: white; text-decoration: none; border-radius: 20px; font-size: 12px; font-weight: 600; transition: 0.3s;">Dashboard</a>
+    <a href="/accounts/logout/" style="padding: 8px 20px; background: #0a7c6f; color: white; text-decoration: none; border-radius: 20px; font-size: 12px; font-weight: 600; transition: 0.3s;">Logout</a>
+  </div>
+</nav>
+{% else %}
 <nav class="navbar">
   <div class="nav-left">
     <a href="/home/" class="nav-logo"><span class="material-symbols-outlined" style="font-size: 28px; color: #b38b59; margin-right: 10px;">home</span>AURA</a>
@@ -299,6 +318,7 @@
     <a href="/store/cart/" class="nav-icon-group"><span class="material-symbols-outlined">shopping_bag</span>Bag</a>
   </div>
 </nav>
+{% endif %}
 
 <div class="overlay">
   <div class="main-container">
